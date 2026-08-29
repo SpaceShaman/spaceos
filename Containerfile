@@ -5,11 +5,13 @@ RUN dnf5 install -y 'dnf5-command(copr)'
 RUN dnf5 copr enable -y eddievs/hyprland
 
 # Install Hyprland and related packages
-RUN dnf5 install -y \ 
-  hyprland \ 
-  sddm \ 
+RUN dnf5 install -y \
+  hyprland \
+  sddm \
   waybar \
-  alacritty
+  alacritty \
+  fish \
+  nvim
 RUN dnf5 clean all
 
 RUN systemctl enable sddm.service
