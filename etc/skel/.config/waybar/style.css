@@ -1,0 +1,56 @@
+@import "colors.css";
+
+* {
+    font-family: sans-serif;
+    font-size: 11px;
+    min-height: 0;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+window#waybar {
+    background: @background;
+    color: @foreground;
+}
+
+#workspaces button {
+    padding: 0 5px;
+    color: @foreground;
+    background: @background;
+}
+
+#workspaces button:hover {
+    color: @white;
+    background: @background;
+}
+
+#workspaces button.active,
+#workspaces button.visible {
+    color: @yellow;
+}
+
+#workspaces button.urgent {
+    color: @background;
+    background: @yellow;
+}
+
+#window {
+    padding: 0 8px;
+    color: @foreground;
+}
+
+#clock,
+#backlight,
+#pulseaudio,
+#battery,
+#tray {
+    padding: 0 8px;
+    border-left: 1px solid @separator;
+}
+
+tooltip {
+    color: @foreground;
+    background: @background;
+    border: 1px solid @foreground;
+}

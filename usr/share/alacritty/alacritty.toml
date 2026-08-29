@@ -1,0 +1,51 @@
+[general]
+import = ["/usr/share/alacritty/themes/dark.toml"]
+
+[font]
+normal = { family = "Hack Nerd Font Propo" }
+size = 18
+
+[mouse]
+hide_when_typing = true
+
+[window]
+decorations = "none"
+dynamic_padding = true
+
+[window.padding]
+x = 2
+
+[[keyboard.bindings]]
+chars = "\u001B\u007F"
+key = "Back"
+mods = "Control"
+
+[[keyboard.bindings]]
+chars = "\u001B[25~"
+key = "Semicolon"
+mods = "Control"
+
+[[keyboard.bindings]]
+action = "ToggleViMode"
+key = "Space"
+mods = "Control"
+
+[[keyboard.bindings]]
+action = "Left"
+key = "J"
+mode = "Vi|~Search"
+
+[[keyboard.bindings]]
+action = "Down"
+key = "K"
+mode = "Vi|~Search"
+
+[[keyboard.bindings]]
+action = "Up"
+key = "L"
+mode = "Vi|~Search"
+
+[[keyboard.bindings]]
+action = "Right"
+key = "Semicolon"
+mode = "Vi|~Search"

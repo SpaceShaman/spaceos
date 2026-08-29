@@ -6,17 +6,25 @@ RUN dnf5 copr enable -y eddievs/hyprland
 
 # Install Hyprland and related packages
 RUN dnf5 install -y \
-  hyprland \
+  --setopt=exclude_from_weak='kitty*' \
   sddm \
+  hyprland \
   waybar \
   alacritty \
   fish \
-  nvim
+  nvim \
+  mc
 RUN dnf5 clean all
+
+RUN useradd --defaults --shell /usr/bin/fish
 
 RUN systemctl enable sddm.service
 RUN systemctl set-default graphical.target
 
-COPY skel/ /etc/skel/
+COPY etc/ /etc/
+COPY usr/ /usr/
+
+RUN mkdir -p /etc/alacritty && \
+  ln -s /usr/share/alacritty/alacritty.toml /etc/alacritty/alacritty.toml
 
 RUN bootc container lint
