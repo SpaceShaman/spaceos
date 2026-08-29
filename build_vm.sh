@@ -1,6 +1,12 @@
 #!/bin/bash
 
-sudo podman pull quay.io/fedora/fedora-bootc:44
+set -e
+
+sudo podman build \
+  --network=host \
+  -t localhost/spaceos:latest \
+  .
+
 sudo podman run \
     --rm \
     -it \
@@ -13,4 +19,4 @@ sudo podman run \
     quay.io/centos-bootc/bootc-image-builder:latest \
     --type qcow2 \
     --rootfs btrfs \
-    quay.io/fedora/fedora-bootc:44
+    localhost/spaceos:latest
