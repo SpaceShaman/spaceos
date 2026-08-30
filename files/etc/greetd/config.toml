@@ -1,0 +1,12 @@
+[terminal]
+vt = 1
+
+# Show text login after logging out.
+[default_session]
+command = "agreety --cmd /usr/local/bin/spaceos-session"
+user = "greetd"
+
+# First run after startup: autologin.
+[initial_session]
+command = "/usr/local/bin/spaceos-session"
+user = "test"

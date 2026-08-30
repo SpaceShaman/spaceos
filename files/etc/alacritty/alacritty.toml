@@ -1,5 +1,5 @@
 [general]
-import = ["/usr/alacritty/themes/dark.toml"]
+import = ["/etc/alacritty/themes/dark.toml"]
 
 [font]
 normal = { family = "Hack Nerd Font Propo" }
