@@ -21,8 +21,7 @@ RUN useradd --defaults --shell /usr/bin/fish
 RUN systemctl enable sddm.service
 RUN systemctl set-default graphical.target
 
-COPY etc/ /etc/
-COPY usr/ /usr/
+COPY files/ /
 
 RUN mkdir -p /etc/alacritty && \
   ln -s /usr/share/alacritty/alacritty.toml /etc/alacritty/alacritty.toml
