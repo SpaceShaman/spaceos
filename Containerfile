@@ -23,7 +23,5 @@ RUN systemctl set-default graphical.target
 
 COPY files/ /
 
-RUN mkdir -p /etc/alacritty && \
-  ln -s /usr/share/alacritty/alacritty.toml /etc/alacritty/alacritty.toml
 
 RUN bootc container lint
