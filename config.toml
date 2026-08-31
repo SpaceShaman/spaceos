@@ -1,5 +1,5 @@
 [[customizations.user]]
-name = "test"
-password = "test"
+name = "admin"
+password = "admin"
 groups = ["wheel"]
 home = "/var/home/test"
