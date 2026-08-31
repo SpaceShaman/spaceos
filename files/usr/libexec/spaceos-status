@@ -1,0 +1,52 @@
+#!/bin/sh
+
+append_status() {
+    if [ -n "$status" ]; then
+        status="$status | $1"
+    else
+        status=$1
+    fi
+}
+
+while :; do
+    status=
+
+    for backlight in /sys/class/backlight/*; do
+        [ -r "$backlight/brightness" ] || continue
+        [ -r "$backlight/max_brightness" ] || continue
+
+        read -r brightness < "$backlight/brightness"
+        read -r max_brightness < "$backlight/max_brightness"
+
+        if [ "$max_brightness" -gt 0 ] 2>/dev/null; then
+            brightness_percent=$((brightness * 100 / max_brightness))
+            [ "$brightness_percent" -gt 100 ] && brightness_percent=100
+            append_status "BRI $brightness_percent%"
+        fi
+        break
+    done
+
+    if command -v wpctl >/dev/null 2>&1; then
+        volume_output=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ 2>/dev/null)
+        volume=$(printf '%s\n' "$volume_output" | awk '{ printf "%.0f%%", $2 * 100 }')
+
+        case $volume_output in
+            *MUTED*) volume="muted" ;;
+        esac
+
+        [ -n "$volume_output" ] && append_status "VOL $volume"
+    fi
+
+    for battery in /sys/class/power_supply/BAT*; do
+        [ -r "$battery/capacity" ] || continue
+
+        read -r capacity < "$battery/capacity"
+        [ "$capacity" -gt 100 ] 2>/dev/null && capacity=100
+        append_status "BAT $capacity%"
+        break
+    done
+
+    append_status "$(date '+%a %b %d, %H:%M')"
+    printf '%s\n' "$status"
+    sleep 1
+done

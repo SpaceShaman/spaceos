@@ -1,0 +1,13 @@
+  #!/bin/sh
+
+  login_user=$(/usr/bin/getent passwd 1000 | /usr/bin/cut -d: -f1)
+
+  if [ -z "$login_user" ]; then
+      exec /usr/sbin/agetty --noclear "$1" "$TERM"
+  fi
+
+  exec /usr/sbin/agetty \
+      --autologin "$login_user" \
+      --noclear \
+      "$1" \
+      "$TERM"

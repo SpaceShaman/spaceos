@@ -7,10 +7,8 @@ RUN dnf5 copr enable -y eddievs/hyprland
 # Install Hyprland and related packages
 RUN dnf5 install -y \
   --setopt=exclude_from_weak='kitty*' \
-  greetd \
-  greetd-selinux \
-  hyprland \
-  waybar \
+  sway \
+  rofi \
   alacritty \
   fish \
   nvim \
@@ -19,8 +17,8 @@ RUN dnf5 clean all
 
 RUN useradd --defaults --shell /usr/bin/fish
 
-RUN systemctl enable greetd.service
-RUN systemctl set-default graphical.target
+RUN systemctl enable getty@tty1.service
+RUN systemctl set-default multi-user.target
 
 COPY files/ /
 

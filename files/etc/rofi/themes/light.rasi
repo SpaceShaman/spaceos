@@ -1,0 +1,22 @@
+* {
+    /* Theme settings */
+    highlight: bold italic;
+    scrollbar: true;
+
+    /* Theme colors */
+    yellow:                      #eba54d;
+    background:                  #FCFCFC;
+    foreground:                  #5C6166;
+    background-color:            @background;
+    border-color:                @foreground;
+    separatorcolor:              @border-color;
+    scrollbar-handle:            @border-color;
+    normal-background:           @background;
+    normal-foreground:           @foreground;
+    alternate-normal-background: @background;
+    alternate-normal-foreground: @foreground;
+    selected-normal-background:  @background;
+    selected-normal-foreground:  @yellow;
+}
+
+@import "common.rasi"
