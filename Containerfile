@@ -9,14 +9,18 @@ RUN dnf5 install -y \
   alacritty \
   fish \
   nvim \
-  mc
+  mc \
+  git \
+  podman \
+  firefox 
 RUN dnf5 clean all
 
 RUN useradd --defaults --shell /usr/bin/fish
 
+COPY . /etc/spaceos/
+RUN cp -asf /etc/spaceos/rootfs/. /
+
 RUN systemctl enable greetd.service
 RUN systemctl set-default graphical.target
-
-COPY files/ /
 
 RUN bootc container lint
