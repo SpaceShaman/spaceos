@@ -2,4 +2,3 @@
 name = "admin"
 password = "admin"
 groups = ["wheel"]
-home = "/var/home/test"
