@@ -25,4 +25,7 @@ RUN mkdir -p /boot/efi \
 
 COPY installer-rootfs/ /
 
+COPY os-release /usr/lib/os-release
+RUN ln -sfn ../usr/lib/os-release /etc/os-release
+
 RUN mkdir -p /var/mnt

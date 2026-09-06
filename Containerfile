@@ -20,6 +20,9 @@ RUN useradd --defaults --shell /usr/bin/fish
 COPY . /etc/spaceos/
 RUN cp -asf /etc/spaceos/rootfs/. /
 
+COPY os-release /usr/lib/os-release
+RUN ln -sfn ../usr/lib/os-release /etc/os-release
+
 RUN systemctl enable greetd.service
 RUN systemctl set-default graphical.target
 

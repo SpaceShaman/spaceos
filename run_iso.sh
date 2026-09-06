@@ -20,7 +20,7 @@ qemu-system-x86_64 \
     -enable-kvm \
     -cpu host \
     -smp 4 \
-    -m 4096 \
+    -m 8192 \
     -device virtio-vga,xres=2560,yres=1440 \
     -display gtk,zoom-to-fit=on \
     -boot once=d \
