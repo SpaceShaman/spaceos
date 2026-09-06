@@ -1,0 +1,26 @@
+/* SpaceOS branding for the classic Anaconda GTK interface. */
+
+@define-color product_bg_color #0f1419;
+
+.logo-sidebar {
+    background-color: @product_bg_color;
+    background-image: none;
+}
+
+.logo {
+    background-color: transparent;
+    background-image: url('/usr/share/anaconda/pixmaps/sidebar-logo.svg');
+    background-position: 50% 20px;
+    background-repeat: no-repeat;
+}
+
+.product-logo {
+    background-color: transparent;
+    background-image: none;
+}
+
+AnacondaSpokeWindow #nav-box {
+    background-color: @product_bg_color;
+    background-image: none;
+    color: #fcfcfc;
+}

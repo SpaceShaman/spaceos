@@ -23,18 +23,6 @@ RUN dnf5 install -y \
 RUN mkdir -p /boot/efi \
   && cp -ra /usr/lib/efi/*/*/EFI /boot/efi
 
-RUN sed -i \
-  -e 's/^NAME=.*/NAME="SpaceOS"/' \
-  -e 's/^PRETTY_NAME=.*/PRETTY_NAME="SpaceOS"/' \
-  /usr/lib/os-release
-
-RUN mkdir -p /etc/anaconda/product.d \
-  && printf '%s\n' \
-  '[Product]' \
-  'product_name = SpaceOS' \
-  '' \
-  '[Base Product]' \
-  'product_name = Fedora Linux' \
-  > /etc/anaconda/product.d/spaceos.conf
+COPY installer-rootfs/ /
 
 RUN mkdir -p /var/mnt

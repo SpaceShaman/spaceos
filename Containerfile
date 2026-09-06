@@ -15,11 +15,6 @@ RUN dnf5 install -y \
   firefox 
 RUN dnf5 clean all
 
-RUN sed -i \
-  -e 's/^NAME=.*/NAME="SpaceOS"/' \
-  -e 's/^PRETTY_NAME=.*/PRETTY_NAME="SpaceOS"/' \
-  /usr/lib/os-release
-
 RUN useradd --defaults --shell /usr/bin/fish
 
 COPY . /etc/spaceos/
