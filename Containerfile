@@ -1,7 +1,7 @@
 FROM quay.io/fedora/fedora-bootc:44
 
-# RUN --mount=type=bind,source=scripts/install-displaylink.sh,target=/install-displaylink.sh,ro \
-#   /install-displaylink.sh
+# COPY scripts/install-displaylink.sh /tmp/install-displaylink.sh
+# RUN /tmp/install-displaylink.sh && rm /tmp/install-displaylink.sh
 
 RUN dnf5 install -y \
   linux-firmware \
