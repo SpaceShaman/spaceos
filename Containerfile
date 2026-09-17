@@ -1,21 +1,92 @@
-FROM quay.io/fedora/fedora-bootc:44
+ARG FEDORA_VERSION=44
+ARG BASE_IMAGE=quay.io/fedora/fedora-bootc:${FEDORA_VERSION}
 
-ARG DISPLAYLINK_URL=https://github.com/displaylink-rpm/displaylink-rpm/releases/download/v6.3.0-1/fedora-44-displaylink-1.15.0-1.github_evdi.x86_64.rpm
-ARG DISPLAYLINK_SHA256=d29d4786267a12e91da50f1584e595093a6cbdeed2647f301a834d465f5d72c8
 
-RUN dnf5 install -y --setopt=install_weak_deps=False \
-      curl coreutils dkms kmod make gcc kernel-devel-matched \
-    && curl --fail --location --silent --show-error "$DISPLAYLINK_URL" \
-      --output /tmp/displaylink.rpm \
-    && echo "$DISPLAYLINK_SHA256  /tmp/displaylink.rpm" | sha256sum --check --strict \
-    && dnf5 install -y --setopt=install_weak_deps=False /tmp/displaylink.rpm \
-    && kernel_version="$(rpm -q --qf '%{VERSION}-%{RELEASE}.%{ARCH}' kernel-core)" \
-    && dkms install --force "evdi/1.15.0-1.github_evdi" -k "$kernel_version" \
-    && depmod -a "$kernel_version" \
-    && printf '%s\n' 'options evdi initial_device_count=4' \
-      > /etc/modprobe.d/evdi.conf \
-    && printf '%s\n' evdi > /etc/modules-load.d/evdi.conf \
-    && rm -f /tmp/displaylink.rpm
+# ============================================================
+# Build DisplayLink EVDI kernel module
+# ============================================================
+
+FROM ${BASE_IMAGE} AS displaylink-builder
+
+ADD https://negativo17.org/repos/fedora-multimedia.repo \
+  /etc/yum.repos.d/negativo17-fedora-multimedia.repo
+
+RUN set -eux; \
+  \
+  KERNEL_VERSION="$(find /usr/lib/modules \
+  -mindepth 1 -maxdepth 1 -type d \
+  -printf '%f\n' | head -n1)"; \
+  \
+  echo "Building EVDI for kernel: ${KERNEL_VERSION}"; \
+  \
+  # fedora-repos-archive is important when the bootc image
+  # contains a kernel slightly older than the current Fedora repos.
+  dnf5 -y install \
+  fedora-repos-archive \
+  akmods \
+  gcc \
+  gcc-c++ \
+  make \
+  dnf5-plugins \
+  "kernel-devel-${KERNEL_VERSION}"; \
+  \
+  # Same source packages Universal Blue uses.
+  dnf5 -y install \
+  kmod-evdi \
+  akmod-evdi; \
+  \
+  # UBlue explicitly uses these flags for EVDI.
+  export CFLAGS="-fno-pie -no-pie"; \
+  \
+  akmods \
+  --force \
+  --kernels "${KERNEL_VERSION}" \
+  --kmod evdi; \
+  \
+  # Fail the image build if EVDI was not actually produced.
+  modinfo \
+  "/usr/lib/modules/${KERNEL_VERSION}/extra/evdi/evdi.ko.xz"; \
+  \
+  # Keep only the resulting binary kmod RPM.
+  mkdir -p /out/kmod; \
+  find /var/cache/akmods/evdi \
+  -type f \
+  -name '*.rpm' \
+  -exec cp -v {} /out/kmod/ \; ; \
+  \
+  # Download userspace part of DisplayLink.
+  mkdir -p /out/userspace; \
+  dnf5 download \
+  --destdir=/out/userspace \
+  libevdi \
+  displaylink; \
+  \
+  find /out -type f -print
+
+
+# ============================================================
+# SpaceOS
+# ============================================================
+
+FROM ${BASE_IMAGE}
+
+COPY --from=displaylink-builder /out /tmp/displaylink
+
+RUN set -eux; \
+  \
+  dnf5 -y install \
+  /tmp/displaylink/userspace/*.rpm \
+  /tmp/displaylink/kmod/*.rpm; \
+  \
+  KERNEL_VERSION="$(find /usr/lib/modules \
+  -mindepth 1 -maxdepth 1 -type d \
+  -printf '%f\n' | head -n1)"; \
+  \
+  depmod -a "${KERNEL_VERSION}"; \
+  \
+  systemctl enable displaylink.service; \
+  \
+  rm -rf /tmp/displaylink
 
 RUN dnf5 install -y \
   linux-firmware \
@@ -41,7 +112,7 @@ RUN useradd --create-home --groups wheel --shell /usr/bin/fish shaman && \
 COPY kargs.d/ /usr/lib/bootc/kargs.d/
 
 COPY . /etc/spaceos/
-RUN cp -asf /etc/spaceos/rootfs/. /
+RUN cp -asf --remove-destination /etc/spaceos/rootfs/. /
 
 COPY os-release /usr/lib/os-release
 RUN ln -sfn ../usr/lib/os-release /etc/os-release
