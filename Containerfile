@@ -12,13 +12,10 @@ ADD https://negativo17.org/repos/fedora-multimedia.repo \
   /etc/yum.repos.d/negativo17-fedora-multimedia.repo
 
 RUN set -eux; \
-  \
   KERNEL_VERSION="$(find /usr/lib/modules \
   -mindepth 1 -maxdepth 1 -type d \
   -printf '%f\n' | head -n1)"; \
-  \
   echo "Building EVDI for kernel: ${KERNEL_VERSION}"; \
-  \
   # fedora-repos-archive is important when the bootc image
   # contains a kernel slightly older than the current Fedora repos.
   dnf5 -y install \
@@ -29,38 +26,30 @@ RUN set -eux; \
   make \
   dnf5-plugins \
   "kernel-devel-${KERNEL_VERSION}"; \
-  \
-  # Same source packages Universal Blue uses.
   dnf5 -y install \
   kmod-evdi \
   akmod-evdi; \
-  \
   # UBlue explicitly uses these flags for EVDI.
   export CFLAGS="-fno-pie -no-pie"; \
-  \
   akmods \
   --force \
   --kernels "${KERNEL_VERSION}" \
   --kmod evdi; \
-  \
   # Fail the image build if EVDI was not actually produced.
   modinfo \
   "/usr/lib/modules/${KERNEL_VERSION}/extra/evdi/evdi.ko.xz"; \
-  \
   # Keep only the resulting binary kmod RPM.
   mkdir -p /out/kmod; \
   find /var/cache/akmods/evdi \
   -type f \
   -name '*.rpm' \
   -exec cp -v {} /out/kmod/ \; ; \
-  \
   # Download userspace part of DisplayLink.
   mkdir -p /out/userspace; \
   dnf5 download \
   --destdir=/out/userspace \
   libevdi \
   displaylink; \
-  \
   find /out -type f -print
 
 
@@ -73,19 +62,14 @@ FROM ${BASE_IMAGE}
 COPY --from=displaylink-builder /out /tmp/displaylink
 
 RUN set -eux; \
-  \
   dnf5 -y install \
   /tmp/displaylink/userspace/*.rpm \
   /tmp/displaylink/kmod/*.rpm; \
-  \
   KERNEL_VERSION="$(find /usr/lib/modules \
   -mindepth 1 -maxdepth 1 -type d \
   -printf '%f\n' | head -n1)"; \
-  \
   depmod -a "${KERNEL_VERSION}"; \
-  \
   systemctl enable displaylink.service; \
-  \
   rm -rf /tmp/displaylink
 
 RUN dnf5 install -y \
