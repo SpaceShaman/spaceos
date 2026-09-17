@@ -1,7 +1,6 @@
 ARG FEDORA_VERSION=44
 ARG BASE_IMAGE=quay.io/fedora/fedora-bootc:${FEDORA_VERSION}
 
-
 # ============================================================
 # Build DisplayLink EVDI kernel module
 # ============================================================
@@ -72,7 +71,10 @@ RUN set -eux; \
   systemctl enable displaylink.service; \
   rm -rf /tmp/displaylink
 
+ARG CHATGPT_RPM_URL=https://persistent.oaistatic.com/codex-app-prod/linux/rpm/latest/chatgpt.x86_64.rpm
+
 RUN dnf5 install -y \
+  glibc-langpack-pl \
   linux-firmware \
   'iwl*firmware' \
   NetworkManager-wifi \
@@ -87,8 +89,19 @@ RUN dnf5 install -y \
   mc \
   git \
   podman \
-  firefox 
+  firefox \
+  "${CHATGPT_RPM_URL}"
 RUN dnf5 clean all
+
+RUN set -eux; \
+  mkdir -p /tmp/npm-cache; \
+  npm install -g \
+  --prefix /usr \
+  --cache /tmp/npm-cache \
+  @openai/codex \
+  @github/copilot \
+  opencommit; \
+  rm -rf /tmp/npm-cache
 
 RUN useradd --create-home --groups wheel --shell /usr/bin/fish shaman && \
   printf '%s\n' 'shaman:ppp' | chpasswd
@@ -97,6 +110,8 @@ COPY kargs.d/ /usr/lib/bootc/kargs.d/
 
 COPY . /etc/spaceos/
 RUN cp -asf --remove-destination /etc/spaceos/rootfs/. /
+
+RUN fc-cache -f -v
 
 COPY os-release /usr/lib/os-release
 RUN ln -sfn ../usr/lib/os-release /etc/os-release
