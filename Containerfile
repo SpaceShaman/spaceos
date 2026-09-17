@@ -1,7 +1,21 @@
 FROM quay.io/fedora/fedora-bootc:44
 
-# COPY scripts/install-displaylink.sh /tmp/install-displaylink.sh
-# RUN /tmp/install-displaylink.sh && rm /tmp/install-displaylink.sh
+ARG DISPLAYLINK_URL=https://github.com/displaylink-rpm/displaylink-rpm/releases/download/v6.3.0-1/fedora-44-displaylink-1.15.0-1.github_evdi.x86_64.rpm
+ARG DISPLAYLINK_SHA256=d29d4786267a12e91da50f1584e595093a6cbdeed2647f301a834d465f5d72c8
+
+RUN dnf5 install -y --setopt=install_weak_deps=False \
+      curl coreutils dkms kmod make gcc kernel-devel-matched \
+    && curl --fail --location --silent --show-error "$DISPLAYLINK_URL" \
+      --output /tmp/displaylink.rpm \
+    && echo "$DISPLAYLINK_SHA256  /tmp/displaylink.rpm" | sha256sum --check --strict \
+    && dnf5 install -y --setopt=install_weak_deps=False /tmp/displaylink.rpm \
+    && kernel_version="$(rpm -q --qf '%{VERSION}-%{RELEASE}.%{ARCH}' kernel-core)" \
+    && dkms install --force "evdi/1.15.0-1.github_evdi" -k "$kernel_version" \
+    && depmod -a "$kernel_version" \
+    && printf '%s\n' 'options evdi initial_device_count=4' \
+      > /etc/modprobe.d/evdi.conf \
+    && printf '%s\n' evdi > /etc/modules-load.d/evdi.conf \
+    && rm -f /tmp/displaylink.rpm
 
 RUN dnf5 install -y \
   linux-firmware \
