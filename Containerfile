@@ -85,6 +85,7 @@ RUN dnf5 install -y 'dnf5-command(copr)'; \
   tuigreet \
   sway \
   waybar \
+  jq \
   rofi \
   alacritty \
   fish \

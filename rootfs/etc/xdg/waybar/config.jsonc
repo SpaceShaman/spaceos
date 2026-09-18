@@ -7,7 +7,9 @@
   "modules-right": ["tray", "network", "battery", "clock"],
   "sway/workspaces": {
     "disable-scroll": true,
-    "all-outputs": false
+    "all-outputs": false,
+    "format": "{name}",
+    "on-update": "/etc/spaceos/rootfs/etc/sway/config.d/workspace.sh normalize"
   },
   "sway/window": {
     "format": "{title}",
