@@ -75,10 +75,12 @@ ARG CHATGPT_RPM_URL=https://persistent.oaistatic.com/codex-app-prod/linux/rpm/la
 
 RUN dnf5 install -y 'dnf5-command(copr)'; \
   dnf5 copr enable -y dejan/lazygit; \
+  dnf5 install -y --allow-downgrade --allowerasing \
+  linux-firmware-whence \
+  iwlwifi-mvm-firmware; \
   dnf5 install -y \
   glibc-langpack-pl \
   linux-firmware \
-  'iwl*firmware' \
   NetworkManager-wifi \
   greetd \
   greetd-selinux \
@@ -96,6 +98,7 @@ RUN dnf5 install -y 'dnf5-command(copr)'; \
   firefox \
   tmux \
   lazygit \
+  golang \
   "${CHATGPT_RPM_URL}"
 RUN dnf5 clean all
 
