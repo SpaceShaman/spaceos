@@ -22,6 +22,11 @@ window#waybar {
     color: @theme_accent;
 }
 
+#workspaces button.urgent {
+    color: @theme_bg;
+    background: @theme_accent;
+}
+
 #window {
     padding: 0 8px;
 }
