@@ -14,15 +14,30 @@ window#waybar {
     padding: 0 5px;
     color: @theme_fg;
     background: transparent;
+    background-image: none;
     border: none;
     border-radius: 0;
+    box-shadow: none;
+    text-shadow: none;
 }
 
 #workspaces button.focused {
     color: @theme_accent;
 }
 
+#workspaces button:hover {
+    color: @theme_accent;
+    background: transparent;
+    box-shadow: none;
+    text-shadow: none;
+}
+
 #workspaces button.urgent {
+    color: @theme_bg;
+    background: @theme_accent;
+}
+
+#workspaces button.urgent:hover {
     color: @theme_bg;
     background: @theme_accent;
 }
