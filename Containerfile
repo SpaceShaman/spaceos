@@ -102,6 +102,9 @@ RUN dnf5 install -y 'dnf5-command(copr)'; \
   "${CHATGPT_RPM_URL}"
 RUN dnf5 clean all
 
+ADD --chmod=0644 https://raw.githubusercontent.com/googlefonts/noto-emoji/v2.051/fonts/NotoColorEmoji.ttf \
+  /usr/share/fonts/noto-emoji/NotoColorEmoji.ttf
+
 RUN set -eux; \
   mkdir -p /tmp/npm-cache; \
   npm install -g \
