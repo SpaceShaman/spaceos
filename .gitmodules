@@ -1,0 +1,3 @@
+[submodule "rootfs/etc/xdg/nvim"]
+	path = rootfs/etc/xdg/nvim
+	url = https://github.com/SpaceShaman/nvim.git
