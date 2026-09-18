@@ -1,27 +1,27 @@
 FROM quay.io/fedora/fedora-bootc:44
 
 RUN dnf5 install -y \
-  anaconda \
-  anaconda-install-img-deps \
-  anaconda-dracut \
-  dracut-config-generic \
-  dracut-network \
-  net-tools \
-  squashfs-tools \
-  xorrisofs \
-  grub2-efi-x64-cdboot \
-  plymouth \
-  default-fonts-core-sans \
-  default-fonts-other-sans \
-  google-noto-sans-cjk-fonts \
-  python3-mako \
-  lorax-templates-* \
-  biosdevname \
-  prefixdevname \
-  && dnf5 clean all
+    anaconda \
+    anaconda-install-img-deps \
+    anaconda-dracut \
+    dracut-config-generic \
+    dracut-network \
+    net-tools \
+    squashfs-tools \
+    xorrisofs \
+    grub2-efi-x64-cdboot \
+    plymouth \
+    default-fonts-core-sans \
+    default-fonts-other-sans \
+    google-noto-sans-cjk-fonts \
+    python3-mako \
+    lorax-templates-* \
+    biosdevname \
+    prefixdevname \
+    && dnf5 clean all
 
 RUN mkdir -p /boot/efi \
-  && cp -ra /usr/lib/efi/*/*/EFI /boot/efi
+    && cp -ra /usr/lib/efi/*/*/EFI /boot/efi
 
 COPY installer-rootfs/ /
 

@@ -4,7 +4,7 @@
   "height": 24,
   "spacing": 6,
   "modules-left": ["sway/workspaces", "sway/window"],
-  "modules-right": ["tray", "network", "battery", "clock"],
+  "modules-right": ["tray", "network", "backlight", "battery", "clock"],
   "sway/workspaces": {
     "disable-scroll": true,
     "all-outputs": false,
@@ -26,6 +26,10 @@
     "format-disconnected": "󰤭 Offline",
     "tooltip-format-wifi": "{essid} · {signalStrength}%",
     "interval": 30
+  },
+  "backlight": {
+    "device": "intel_backlight",
+    "format": "󰃠 {percent}%"
   },
   "battery": {
     "bat": "BAT0",
