@@ -41,7 +41,7 @@ RUN set -eux \
     && find /var/cache/akmods/evdi \
         -type f \
         -name '*.rpm' \
-        -exec cp -v {} /out/kmod/ + \
+        -exec cp -v -t /out/kmod/ {} + \
     # Download userspace part of DisplayLink.
     && mkdir -p /out/userspace \
     && dnf5 download \
