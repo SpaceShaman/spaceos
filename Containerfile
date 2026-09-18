@@ -73,7 +73,9 @@ RUN set -eux; \
 
 ARG CHATGPT_RPM_URL=https://persistent.oaistatic.com/codex-app-prod/linux/rpm/latest/chatgpt.x86_64.rpm
 
-RUN dnf5 install -y \
+RUN dnf5 install -y 'dnf5-command(copr)'; \
+  dnf5 copr enable -y dejan/lazygit; \
+  dnf5 install -y \
   glibc-langpack-pl \
   linux-firmware \
   'iwl*firmware' \
@@ -90,6 +92,8 @@ RUN dnf5 install -y \
   git \
   podman \
   firefox \
+  tmux \
+  lazygit \
   "${CHATGPT_RPM_URL}"
 RUN dnf5 clean all
 

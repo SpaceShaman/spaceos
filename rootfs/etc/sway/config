@@ -1,9 +1,11 @@
-# SpaceOS: minimal Sway configuration based on the AwesomeWM setup.
+input type:keyboard {
+    xkb_layout pl
+}
 
 set $mod Mod4
 set $term alacritty
 
-# Ayu Dark, with the same plain window style as AwesomeWM.
+# Ayu Dark
 font sans 8
 default_border pixel 1
 default_floating_border pixel 1
@@ -22,7 +24,7 @@ output * bg #000000 solid_color
 bar {
     position top
     height 15
-    font sans 8
+    font sans 10
 
     workspace_buttons yes
     binding_mode_indicator no
@@ -45,8 +47,16 @@ bar {
     }
 }
 
+# Reload the configuration file.
+bindsym $mod+Shift+r reload
+
+# Close focused window.
+bindsym $mod+q kill
+
 # Terminal.
 bindsym $mod+Return exec $term
+
+# Application launcher.
 bindsym $mod+r exec rofi -config /etc/rofi/config.rasi -show drun
 
 # Focus and move windows.
