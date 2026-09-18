@@ -46,7 +46,7 @@ window#waybar {
     padding: 0 8px;
 }
 
-#tray, #network, #backlight, #battery, #clock {
+#tray, #network, #pulseaudio, #backlight, #battery, #clock {
     padding: 0 2px;
 }
 

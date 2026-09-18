@@ -4,7 +4,7 @@
   "height": 24,
   "spacing": 6,
   "modules-left": ["sway/workspaces", "sway/window"],
-  "modules-right": ["tray", "network", "backlight", "battery", "clock"],
+  "modules-right": ["tray", "network", "pulseaudio", "backlight", "battery", "clock"],
   "sway/workspaces": {
     "disable-scroll": true,
     "all-outputs": false,
@@ -26,6 +26,12 @@
     "format-disconnected": "󰤭 Offline",
     "tooltip-format-wifi": "{essid} · {signalStrength}%",
     "interval": 30
+  },
+  "pulseaudio": {
+    "format": "{icon} {volume}%",
+    "format-muted": "󰝟 Wyciszony",
+    "format-icons": ["󰕿", "󰖀", "󰕾"],
+    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
   },
   "backlight": {
     "device": "intel_backlight",
