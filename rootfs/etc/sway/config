@@ -6,6 +6,9 @@ set $mod Mod4
 set $term alacritty
 mouse_warping container
 
+# Show the calendar opened from Waybar beside the pointer.
+for_window [title="Kalendarz"] floating enable, move position cursor
+
 include /etc/spaceos/rootfs/etc/sway/config.d/theme/dark.conf
 include /etc/spaceos/rootfs/etc/sway/config.d/outputs.conf
 include /etc/spaceos/rootfs/etc/sway/config.d/bindings.conf

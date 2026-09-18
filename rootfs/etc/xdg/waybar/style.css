@@ -1,0 +1,35 @@
+@import url("theme-dark.css");
+
+* {
+    font-family: "Hack Nerd Font Mono";
+    font-size: 13px;
+}
+
+window#waybar {
+    background: @theme_bg;
+    color: @theme_fg;
+}
+
+#workspaces button {
+    padding: 0 5px;
+    color: @theme_fg;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+}
+
+#workspaces button.focused {
+    color: @theme_accent;
+}
+
+#window {
+    padding: 0 8px;
+}
+
+#tray, #network, #battery, #clock {
+    padding: 0 2px;
+}
+
+#clock {
+    padding-right: 10px;
+}

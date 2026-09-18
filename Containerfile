@@ -84,6 +84,7 @@ RUN dnf5 install -y 'dnf5-command(copr)'; \
   greetd-selinux \
   tuigreet \
   sway \
+  waybar \
   rofi \
   alacritty \
   fish \

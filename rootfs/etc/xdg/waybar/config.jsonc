@@ -1,0 +1,38 @@
+{
+  "layer": "top",
+  "position": "top",
+  "height": 24,
+  "spacing": 6,
+  "modules-left": ["sway/workspaces", "sway/window"],
+  "modules-right": ["tray", "network", "battery", "clock"],
+  "sway/workspaces": {
+    "disable-scroll": true,
+    "all-outputs": false
+  },
+  "sway/window": {
+    "format": "{title}",
+    "max-length": 70,
+    "separate-outputs": false
+  },
+  "tray": {
+    "icon-size": 16,
+    "spacing": 6
+  },
+  "network": {
+    "format-wifi": "󰖩 {essid}",
+    "format-ethernet": "󰈀 Ethernet",
+    "format-disconnected": "󰤭 Offline",
+    "tooltip-format-wifi": "{essid} · {signalStrength}%",
+    "interval": 30
+  },
+  "battery": {
+    "bat": "BAT0",
+    "format": "{icon} {capacity}%",
+    "format-charging": "󰂄 {capacity}%",
+    "format-icons": ["󰂎", "󰁺", "󰁼", "󰁾", "󰂀", "󰁹"]
+  },
+  "clock": {
+    "format": "󰃭 {0:%d.%m.%Y}  󰥔 {0:%H:%M}",
+    "tooltip-format": "<tt>{calendar}</tt>",
+  }
+}
