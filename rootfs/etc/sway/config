@@ -1,3 +1,5 @@
+include /etc/sway/config.d/10-systemd-session.conf
+
 input type:keyboard {
     xkb_layout pl
 }

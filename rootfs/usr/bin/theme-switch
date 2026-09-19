@@ -3,14 +3,25 @@
 set -eu
 
 case "$(readlink /etc/alacritty/themes/current.toml)" in
-    dark.toml) theme=light ;;
-    *)         theme=dark ;;
+    dark.toml)
+        theme=light
+        color_scheme=prefer-light
+        gtk_theme=Adwaita
+        ;;
+    *)
+        theme=dark
+        color_scheme=prefer-dark
+        gtk_theme=Adwaita-dark
+        ;;
 esac
 
 ln -sfn "$theme.toml" /etc/alacritty/themes/current.toml
 ln -sfn "$theme.conf" /etc/sway/config.d/theme/current.conf
 ln -sfn "theme-$theme.css" /etc/xdg/waybar/theme-current.css
 touch /etc/alacritty/alacritty.toml /etc/xdg/waybar/style.css
+
+gsettings set org.gnome.desktop.interface color-scheme "$color_scheme"
+gsettings set org.gnome.desktop.interface gtk-theme "$gtk_theme"
 
 if [ -S "${SWAYSOCK:-}" ]; then
     swaymsg reload >/dev/null
