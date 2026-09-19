@@ -72,7 +72,11 @@ RUN set -eux \
 
 ARG CHATGPT_RPM_URL=https://persistent.oaistatic.com/codex-app-prod/linux/rpm/latest/chatgpt.x86_64.rpm
 
-RUN dnf5 install -y 'dnf5-command(copr)' \
+RUN dnf5 install -y \
+    'dnf5-command(config-manager)' \
+    'dnf5-command(copr)' \
+    && dnf5 config-manager addrepo \
+        --from-repofile https://download.docker.com/linux/fedora/docker-ce.repo \
     && dnf5 copr enable -y dejan/lazygit \
     && dnf5 install -y --allow-downgrade --allowerasing \
         linux-firmware-whence \
@@ -96,12 +100,22 @@ RUN dnf5 install -y 'dnf5-command(copr)' \
         mc \
         git \
         podman \
+        docker-ce \
+        docker-ce-cli \
+        containerd.io \
+        docker-buildx-plugin \
+        docker-compose-plugin \
         firefox \
         tmux \
         lazygit \
         golang \
-        "${CHATGPT_RPM_URL}"
+        "${CHATGPT_RPM_URL}" \
+        uv
 RUN dnf5 clean all
+
+RUN systemctl enable \
+    docker.service \
+    containerd.service
 
 ADD --chmod=0644 \
     https://raw.githubusercontent.com/googlefonts/noto-emoji/v2.051/fonts/NotoColorEmoji.ttf /usr/share/fonts/noto-emoji/NotoColorEmoji.ttf
@@ -116,7 +130,7 @@ RUN set -eux \
         opencommit \
     && rm -rf /tmp/npm-cache
 
-RUN useradd --create-home --groups wheel --shell /usr/bin/fish shaman \
+RUN useradd --create-home --groups wheel,docker --shell /usr/bin/fish shaman \
     && printf '%s\n' 'shaman:ppp' | chpasswd
 
 COPY kargs.d/ /usr/lib/bootc/kargs.d/
