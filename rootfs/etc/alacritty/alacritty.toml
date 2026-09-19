@@ -1,5 +1,6 @@
 [general]
-import = ["/etc/alacritty/themes/dark.toml"]
+import = ["/etc/alacritty/themes/current.toml"]
+live_config_reload = true
 
 [font]
 normal = { family = "Hack Nerd Font Mono" }
