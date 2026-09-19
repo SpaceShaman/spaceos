@@ -1,0 +1,24 @@
+keybindings = [
+  # Increase the volume of the selected item by 1%
+  { key = { Char = ";" }, action = { SetRelativeVolume = 0.01 } },
+  { key = "Right", action = { SetRelativeVolume = 0.01 } },
+  # Decrease the volume of the selected item by 1%
+  { key = { Char = "j" }, action = { SetRelativeVolume = -0.01 } },
+  { key = "Left", action = { SetRelativeVolume = -0.01 } },
+  # Open a dropdown for the selected item or chose an item in the dropdown
+  { key = { Char = "c" }, action = "ActivateDropdown" },
+  { key = "Enter", action = "ActivateDropdown" },
+  # Close an open dropdown
+  { key = "Esc", action = "CloseDropdown" },
+  # Select the next item
+  { key = { Char = "k" }, action = "MoveDown" },
+  { key = "Down", action = "MoveDown" },
+  # Select the previous item
+  { key = { Char = "l" }, action = "MoveUp" },
+  { key = "Up", action = "MoveUp" },
+  # Select the next tab
+  { key = { Char = ":" }, action = "TabRight" },
+  { key = "Tab", action = "TabRight" },
+  # Select the previous tab
+  { key = { Char = "J" }, action = "TabLeft" },
+]

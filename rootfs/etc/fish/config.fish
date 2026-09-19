@@ -5,6 +5,8 @@ if status is-interactive
   set PATH "/usr/sbin:$HOME/.local/bin:$PATH:$HOME/.scripts"
   alias g=sgpt
   alias c=oco
+  alias wiremix='wiremix --config /etc/wiremix/wiremix.toml'
+  alias mix=wiremix
   alias w=wifitui
   alias b=bluetoothctl
   # Connect to Headphones
