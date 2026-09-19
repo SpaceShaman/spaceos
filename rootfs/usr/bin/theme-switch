@@ -2,66 +2,22 @@
 
 set -eu
 
-readonly alacritty_themes_dir="/etc/alacritty/themes"
-readonly alacritty_active_theme="${alacritty_themes_dir}/current.toml"
-readonly alacritty_config="/etc/alacritty/alacritty.toml"
-readonly sway_themes_dir="/etc/sway/config.d/theme"
-readonly sway_active_theme="${sway_themes_dir}/current.conf"
-readonly waybar_themes_dir="/etc/xdg/waybar"
-readonly waybar_active_theme="${waybar_themes_dir}/theme-current.css"
-readonly waybar_style="${waybar_themes_dir}/style.css"
-
-if [ "$#" -ne 0 ]; then
-    printf 'Usage: %s\n' "${0##*/}" >&2
-    exit 2
-fi
-
-case "$(readlink "$alacritty_active_theme" 2>/dev/null || true)" in
-    dark.toml)
-        theme="light"
-        ;;
-    light.toml)
-        theme="dark"
-        ;;
-    *)
-        theme="dark"
-        ;;
+case "$(readlink /etc/alacritty/themes/current.toml)" in
+    dark.toml) theme=light ;;
+    *)         theme=dark ;;
 esac
 
-alacritty_target="${theme}.toml"
-sway_target="${theme}.conf"
-waybar_target="theme-${theme}.css"
+ln -sfn "$theme.toml" /etc/alacritty/themes/current.toml
+ln -sfn "$theme.conf" /etc/sway/config.d/theme/current.conf
+ln -sfn "theme-$theme.css" /etc/xdg/waybar/theme-current.css
+touch /etc/alacritty/alacritty.toml /etc/xdg/waybar/style.css
 
-for theme_file in \
-    "${alacritty_themes_dir}/${alacritty_target}" \
-    "${sway_themes_dir}/${sway_target}" \
-    "${waybar_themes_dir}/${waybar_target}"
-do
-    if [ ! -f "$theme_file" ]; then
-        printf 'Theme file not found: %s\n' "$theme_file" >&2
-        exit 1
-    fi
-done
-
-ln -sfn "$alacritty_target" "$alacritty_active_theme"
-ln -sfn "$sway_target" "$sway_active_theme"
-ln -sfn "$waybar_target" "$waybar_active_theme"
-touch "$alacritty_config"
-touch "$waybar_style"
-
-session_uid="${SUDO_UID:-$(id -u)}"
-
-if command -v swaymsg >/dev/null 2>&1; then
-    if [ -n "${SWAYSOCK:-}" ] && [ -S "$SWAYSOCK" ]; then
-        swaymsg reload >/dev/null 2>&1 ||
-            printf 'Warning: could not reload Sway\n' >&2
-    else
-        for sway_socket in "/run/user/${session_uid}"/sway-ipc.*.sock; do
-            [ -S "$sway_socket" ] || continue
-            swaymsg -s "$sway_socket" reload >/dev/null 2>&1 ||
-                printf 'Warning: could not reload Sway\n' >&2
-        done
-    fi
+if [ -S "${SWAYSOCK:-}" ]; then
+    swaymsg reload >/dev/null
+else
+    for socket in "/run/user/${SUDO_UID:-$(id -u)}"/sway-ipc.*.sock; do
+        [ -S "$socket" ] && swaymsg -s "$socket" reload >/dev/null
+    done
 fi
 
 printf 'Theme changed to %s\n' "$theme"
