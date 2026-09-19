@@ -110,7 +110,10 @@ RUN dnf5 install -y \
         lazygit \
         golang \
         "${CHATGPT_RPM_URL}" \
-        uv
+        uv \
+        grim \
+        slurp \
+        swappy
 RUN dnf5 clean all
 
 RUN systemctl enable \
