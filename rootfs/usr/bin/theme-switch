@@ -18,6 +18,7 @@ esac
 ln -sfn "$theme.toml" /etc/alacritty/themes/current.toml
 ln -sfn "$theme.conf" /etc/sway/config.d/theme/current.conf
 ln -sfn "theme-$theme.css" /etc/xdg/waybar/theme-current.css
+ln -sfn "$theme.rasi" /etc/rofi/themes/current.rasi
 touch /etc/alacritty/alacritty.toml /etc/xdg/waybar/style.css
 
 gsettings set org.gnome.desktop.interface color-scheme "$color_scheme"

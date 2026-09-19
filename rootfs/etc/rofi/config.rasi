@@ -8,4 +8,4 @@ configuration {
       sorting-method:    "name";
   }
 }
-@theme "themes/dark"
+@theme "themes/current"
