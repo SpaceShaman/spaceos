@@ -29,7 +29,7 @@
   },
   "pulseaudio": {
     "format": "{icon} {volume}%",
-    "format-muted": "󰝟 Wyciszony",
+    "format-muted": "󰝟 Muted",
     "format-icons": ["󰕿", "󰖀", "󰕾"],
     "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
   },
@@ -44,7 +44,7 @@
     "format-icons": ["󰂎", "󰁺", "󰁼", "󰁾", "󰂀", "󰁹"]
   },
   "clock": {
-    "format": "󰃭 {0:%d.%m.%Y}  󰥔 {0:%H:%M}",
+    "format": "{0:%d.%m.%Y} {0:%H:%M}",
     "tooltip-format": "<tt>{calendar}</tt>",
   }
 }

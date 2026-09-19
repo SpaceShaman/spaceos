@@ -1,8 +1,8 @@
 @import url("theme-dark.css");
 
 * {
-    font-family: "Hack Nerd Font Mono";
-    font-size: 13px;
+    font-family: "Hack Nerd Font";
+    font-size: 15px;
 }
 
 window#waybar {
