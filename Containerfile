@@ -157,9 +157,6 @@ RUN set -eux \
         opencommit \
     && rm -rf /tmp/npm-cache
 
-RUN useradd --create-home --groups wheel,docker --shell /usr/bin/fish shaman \
-    && printf '%s\n' 'shaman:ppp' | chpasswd
-
 COPY kargs.d/ /usr/lib/bootc/kargs.d/
 
 COPY . /etc/spaceos/
