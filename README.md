@@ -5,6 +5,11 @@ environment, is delivered as an OCI image, and receives transactional system upd
 repository contains the system definition, desktop configuration, GHCR publishing automation, and the process used
 to build an Anaconda installer ISO.
 
+For the story behind the project, see
+[How and why I built my own bootc-based Linux distribution](https://spaceshaman.github.io/posts/how-and-why-i-built-my-own-bootc-based-linux-distribution/).
+The article covers the path from the initial idea to an encrypted dual-boot installation, DisplayLink support, and
+the CI/CD update pipeline used by SpaceOS.
+
 > [!IMPORTANT]
 > SpaceOS is built specifically for my hardware, workflow, and personal preferences. I do not recommend using it
 > directly as a general-purpose distribution. You are, however, encouraged to fork this repository and use it as a
@@ -221,4 +226,3 @@ dependencies inherited from the Fedora base image.
 | `XF86AudioRaiseVolume` / `XF86AudioLowerVolume` | Increase/decrease audio volume. |
 | `XF86AudioMute` | Toggle audio mute. |
 | `XF86MonBrightnessUp` / `XF86MonBrightnessDown` | Increase/decrease display brightness. |
-
