@@ -113,7 +113,9 @@ RUN dnf5 install -y \
         uv \
         grim \
         slurp \
-        swappy
+        swappy \
+        adw-gtk3-theme \
+        xdg-desktop-portal-gtk
 RUN dnf5 clean all
 
 RUN systemctl enable \

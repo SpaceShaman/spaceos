@@ -6,12 +6,12 @@ case "$(readlink /etc/alacritty/themes/current.toml)" in
     dark.toml)
         theme=light
         color_scheme=prefer-light
-        gtk_theme=Adwaita
+        gtk_theme=adw-gtk3
         ;;
     *)
         theme=dark
         color_scheme=prefer-dark
-        gtk_theme=Adwaita-dark
+        gtk_theme=adw-gtk3-dark
         ;;
 esac
 
