@@ -6,12 +6,12 @@ case "$(readlink /etc/alacritty/themes/current.toml)" in
     dark.toml)
         theme=light
         color_scheme=prefer-light
-        gtk_theme=adw-gtk3
+        gtk_theme=Ayu-Light
         ;;
     *)
         theme=dark
         color_scheme=prefer-dark
-        gtk_theme=adw-gtk3-dark
+        gtk_theme=Ayu-Dark
         ;;
 esac
 
@@ -19,6 +19,7 @@ ln -sfn "$theme.toml" /etc/alacritty/themes/current.toml
 ln -sfn "$theme.conf" /etc/sway/config.d/theme/current.conf
 ln -sfn "theme-$theme.css" /etc/xdg/waybar/theme-current.css
 ln -sfn "$theme.rasi" /etc/rofi/themes/current.rasi
+ln -sfn "/usr/share/themes/$gtk_theme/ayu.css" /etc/xdg/gtk-4.0/current.css
 touch /etc/alacritty/alacritty.toml /etc/xdg/waybar/style.css
 
 gsettings set org.gnome.desktop.interface color-scheme "$color_scheme"

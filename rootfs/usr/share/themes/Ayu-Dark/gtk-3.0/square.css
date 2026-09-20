@@ -1,0 +1,21 @@
+decoration,
+window decoration,
+window.csd.unified,
+window.csd.unified > decoration,
+window.csd.unified > decoration-overlay,
+window.rounded,
+window.rounded actionbar,
+window.rounded decoration,
+window.rounded actionbar decoration {
+  border-radius: 0;
+}
+
+.background .titlebar,
+.background .titlebar:backdrop,
+window headerbar,
+window headerbar:backdrop,
+window stack headerbar,
+window stack headerbar:backdrop {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}

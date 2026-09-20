@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=X-GNOME-Metatheme
+Name=Ayu Dark
+
+[X-GNOME-Metatheme]
+GtkTheme=Ayu-Dark
+ColorScheme=dark
+
