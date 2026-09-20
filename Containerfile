@@ -73,8 +73,7 @@ RUN set -eux \
 ARG CHATGPT_RPM_URL=https://persistent.oaistatic.com/codex-app-prod/linux/rpm/latest/chatgpt.x86_64.rpm
 
 ADD --chmod=0644 \
-    https://repo.teamsforlinux.de/teams-for-linux.asc \
-    /etc/pki/rpm-gpg/teams-for-linux.asc
+    https://repo.teamsforlinux.de/teams-for-linux.asc /etc/pki/rpm-gpg/teams-for-linux.asc
 RUN rpm --import /etc/pki/rpm-gpg/teams-for-linux.asc
 
 RUN dnf5 install -y \
@@ -97,6 +96,10 @@ RUN dnf5 install -y \
         tuigreet \
         sway \
         waybar \
+        plymouth \
+        plymouth-plugin-two-step \
+        plymouth-theme-spinner \
+        librsvg2-tools \
         adw-gtk3-theme \
         xdg-desktop-portal-gtk \
         wiremix \
@@ -161,6 +164,20 @@ COPY kargs.d/ /usr/lib/bootc/kargs.d/
 
 COPY . /etc/spaceos/
 RUN cp -asf --remove-destination /etc/spaceos/rootfs/. /
+
+RUN set -eux \
+    && rsvg-convert \
+        --width 465 \
+        --height 120 \
+        --output /usr/share/plymouth/themes/spinner/watermark.png \
+        /usr/share/pixmaps/spaceos-logo.svg
+
+RUN set -eux \
+    && KERNEL_VERSION="$(find /usr/lib/modules \
+        -mindepth 1 -maxdepth 1 -type d \
+        -printf '%f\n' | head -n1)" \
+    && env DRACUT_NO_XATTR=1 \
+        dracut -vf "/usr/lib/modules/${KERNEL_VERSION}/initramfs.img" "${KERNEL_VERSION}"
 
 RUN fc-cache -f -v
 
