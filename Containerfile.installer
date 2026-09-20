@@ -4,6 +4,7 @@ ARG BASE_IMAGE=quay.io/fedora/fedora-bootc:${FEDORA_VERSION}
 FROM ${BASE_IMAGE}
 
 ARG SPACEOS_VERSION=0.0.0-devel
+ARG SPACEOS_DISTRO_VERSION=0.0
 ARG SPACEOS_BUILD_ID=local
 
 RUN dnf5 install -y \
@@ -36,7 +37,7 @@ RUN printf '%s\n' \
         "VERSION=\"${SPACEOS_VERSION}\"" \
         'ID=spaceos-installer' \
         'ID_LIKE=fedora' \
-        "VERSION_ID=\"${SPACEOS_VERSION}\"" \
+        "VERSION_ID=\"${SPACEOS_DISTRO_VERSION}\"" \
         "BUILD_ID=\"${SPACEOS_BUILD_ID}\"" \
         "PRETTY_NAME=\"SpaceOS ${SPACEOS_VERSION} Installer\"" \
         'HOME_URL="https://github.com/SpaceShaman/spaceos"' \

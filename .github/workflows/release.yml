@@ -104,10 +104,12 @@ jobs:
       - name: Build Anaconda installer image
         shell: bash
         run: |
+          installer_version=${VERSION%.*}
           sudo podman build \
             --network=host \
             --build-arg "BASE_IMAGE=${BASE_IMAGE}" \
             --build-arg "SPACEOS_VERSION=${VERSION}" \
+            --build-arg "SPACEOS_DISTRO_VERSION=${installer_version}" \
             --build-arg SPACEOS_BUILD_ID=release \
             --file Containerfile.installer \
             --tag "localhost/spaceos-installer:v${VERSION}" \
