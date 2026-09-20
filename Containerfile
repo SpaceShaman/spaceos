@@ -72,11 +72,18 @@ RUN set -eux \
 
 ARG CHATGPT_RPM_URL=https://persistent.oaistatic.com/codex-app-prod/linux/rpm/latest/chatgpt.x86_64.rpm
 
+ADD --chmod=0644 \
+    https://repo.teamsforlinux.de/teams-for-linux.asc \
+    /etc/pki/rpm-gpg/teams-for-linux.asc
+RUN rpm --import /etc/pki/rpm-gpg/teams-for-linux.asc
+
 RUN dnf5 install -y \
     'dnf5-command(config-manager)' \
     'dnf5-command(copr)' \
     && dnf5 config-manager addrepo \
         --from-repofile https://download.docker.com/linux/fedora/docker-ce.repo \
+    && dnf5 config-manager addrepo \
+        --from-repofile https://repo.teamsforlinux.de/rpm/teams-for-linux.repo \
     && dnf5 copr enable -y dejan/lazygit \
     && dnf5 install -y --allow-downgrade --allowerasing \
         linux-firmware-whence \
@@ -90,6 +97,8 @@ RUN dnf5 install -y \
         tuigreet \
         sway \
         waybar \
+        adw-gtk3-theme \
+        xdg-desktop-portal-gtk \
         wiremix \
         brightnessctl \
         jq \
@@ -100,6 +109,7 @@ RUN dnf5 install -y \
         mc \
         git \
         podman \
+        fuse-libs \
         docker-ce \
         docker-ce-cli \
         containerd.io \
@@ -114,9 +124,18 @@ RUN dnf5 install -y \
         grim \
         slurp \
         swappy \
-        adw-gtk3-theme \
-        xdg-desktop-portal-gtk
+        teams-for-linux \
+        thunderbird \
+        qbittorrent \
+        vlc \
+        gimp
 RUN dnf5 clean all
+
+ADD --chmod=0755 \
+    https://updates.signal.org/desktop/signal-desktop.AppImage /usr/bin/signal-desktop
+
+ADD --chmod=0644 \
+    https://raw.githubusercontent.com/signalapp/Signal-Desktop/main/build/icons/png/512x512.png /usr/share/icons/hicolor/512x512/apps/signal-desktop.png
 
 RUN systemctl enable \
     docker.service \
