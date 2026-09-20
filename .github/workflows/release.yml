@@ -20,7 +20,6 @@ jobs:
       version: ${{ steps.release.outputs.version }}
       base-image: ${{ steps.base.outputs.image }}
       base-digest: ${{ steps.base.outputs.digest }}
-      image: ${{ steps.release.outputs.image }}
     steps:
       - name: Check out release
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
@@ -36,7 +35,6 @@ jobs:
             exit 1
           fi
           printf 'version=%s\n' "${tag#v}" >>"$GITHUB_OUTPUT"
-          printf 'image=ghcr.io/%s\n' "${GITHUB_REPOSITORY,,}" >>"$GITHUB_OUTPUT"
 
       - name: Install skopeo
         shell: bash
@@ -69,123 +67,3 @@ jobs:
       base-image: ${{ needs.prepare.outputs.base-image }}
       base-digest: ${{ needs.prepare.outputs.base-digest }}
       tags: ${{ format('{0} stable latest auto', github.ref_name) }}
-
-  iso:
-    needs: [prepare, image]
-    runs-on: ubuntu-24.04
-    timeout-minutes: 120
-    permissions:
-      contents: write
-      packages: read
-    env:
-      IMAGE: ${{ needs.prepare.outputs.image }}
-      VERSION: ${{ needs.prepare.outputs.version }}
-      BASE_IMAGE: ${{ needs.prepare.outputs.base-image }}
-      BIB_IMAGE: ghcr.io/osbuild/image-builder-cli:latest
-
-    steps:
-      - name: Check out release
-        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
-        with:
-          ref: ${{ github.ref_name }}
-
-      - name: Log root Podman into GHCR
-        shell: bash
-        env:
-          GHCR_TOKEN: ${{ github.token }}
-        run: |
-          printf '%s' "$GHCR_TOKEN" | sudo podman login ghcr.io \
-            --username "$GITHUB_ACTOR" --password-stdin
-
-      - name: Pull release payload
-        shell: bash
-        run: sudo podman pull "${IMAGE}:auto"
-
-      - name: Build Anaconda installer image
-        shell: bash
-        run: |
-          installer_version=${VERSION%.*}
-          sudo podman build \
-            --network=host \
-            --build-arg "BASE_IMAGE=${BASE_IMAGE}" \
-            --build-arg "SPACEOS_VERSION=${VERSION}" \
-            --build-arg "SPACEOS_DISTRO_VERSION=${installer_version}" \
-            --build-arg SPACEOS_BUILD_ID=release \
-            --file Containerfile.installer \
-            --tag "localhost/spaceos-installer:v${VERSION}" \
-            .
-
-      - name: Build installer ISO
-        shell: bash
-        run: |
-          set -euo pipefail
-          mkdir -p output
-          printf '%s\n' '{"customizations":{"installer":{"kickstart":{"contents":""}},"kernel":{"append":"inst.graphical"}}}' \
-            | sudo podman run \
-                --rm \
-                --interactive \
-                --privileged \
-                --security-opt label=type:unconfined_t \
-                --volume "${GITHUB_WORKSPACE}/output:/output" \
-                --volume /var/lib/containers/storage:/var/lib/containers/storage \
-                "$BIB_IMAGE" \
-                build \
-                --output-dir /output \
-                --output-name spaceos \
-                --blueprint - \
-                --bootc-ref "localhost/spaceos-installer:v${VERSION}" \
-                --bootc-installer-payload-ref "${IMAGE}:auto" \
-                --bootc-default-fs btrfs \
-                bootc-installer
-          sudo chown --recursive "$(id -u):$(id -g)" output
-
-      - name: Prepare release assets
-        id: assets
-        shell: bash
-        run: |
-          set -euo pipefail
-          source_iso=$(find output -type f -name '*.iso' -print -quit)
-          if [[ -z "$source_iso" ]]; then
-            printf 'Image Builder did not produce an ISO.\n' >&2
-            exit 1
-          fi
-          iso="SpaceOS-v${VERSION}-x86_64.iso"
-          mv "$source_iso" "$iso"
-          sha256sum "$iso" >"${iso}.sha256"
-          printf 'iso=%s\n' "$iso" >>"$GITHUB_OUTPUT"
-
-      - name: Validate ISO structure
-        shell: bash
-        run: |
-          set -euo pipefail
-          iso='${{ steps.assets.outputs.iso }}'
-          test -s "$iso"
-          sha256sum --check "${iso}.sha256"
-          sudo apt-get update
-          sudo apt-get install --yes xorriso
-          xorriso -indev "$iso" -report_el_torito plain
-
-      - name: Create GitHub release and upload ISO
-        shell: bash
-        env:
-          GH_TOKEN: ${{ github.token }}
-          ISO: ${{ steps.assets.outputs.iso }}
-        run: |
-          set -euo pipefail
-          if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
-            gh release upload "$GITHUB_REF_NAME" "$ISO" "${ISO}.sha256" --clobber
-          else
-            gh release create "$GITHUB_REF_NAME" "$ISO" "${ISO}.sha256" \
-              --verify-tag \
-              --generate-notes \
-              --title "SpaceOS ${GITHUB_REF_NAME}"
-          fi
-
-      - name: Write ISO summary
-        shell: bash
-        run: |
-          {
-            printf '### SpaceOS installer ISO\n\n'
-            printf -- '- File: `%s`\n' '${{ steps.assets.outputs.iso }}'
-            printf -- '- Installed update channel: `%s:auto`\n' "$IMAGE"
-          } >>"$GITHUB_STEP_SUMMARY"

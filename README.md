@@ -2,8 +2,8 @@
 
 SpaceOS is a personal image-based Linux distribution built on Fedora Bootc 44. It uses Sway as its graphical
 environment, is delivered as an OCI image, and receives transactional system updates through `bootc`. This
-repository contains the system definition, desktop configuration, GHCR publishing automation, and the process used
-to build an Anaconda installer ISO.
+repository contains the system definition, desktop configuration, GHCR publishing automation, and a script for
+building an Anaconda installer ISO locally.
 
 For the story behind the project, see
 [How and why I built my own bootc-based Linux distribution](https://spaceshaman.github.io/posts/how-and-why-i-built-my-own-bootc-based-linux-distribution/).
@@ -31,19 +31,45 @@ the CI/CD update pipeline used by SpaceOS.
 
 ### Installing from an ISO
 
-Installer images are available from this repository's **Releases** page. An ISO is produced only for official
-releases tagged as `vMAJOR.MINOR.PATCH`.
+Installer images are not published as GitHub Release assets because the complete ISO exceeds GitHub's per-file
+size limit. Build the installer locally from the repository instead. The script requires Podman, root access through
+`sudo`, and enough free disk space for the container images and resulting ISO.
 
-1. Download `SpaceOS-vX.Y.Z-x86_64.iso` and its corresponding `.sha256` file from GitHub Releases.
-2. Verify the checksum:
+1. Clone the repository and check out the release tag to install:
 
    ```bash
+   git clone https://github.com/SpaceShaman/spaceos.git
+   cd spaceos
+   git checkout vX.Y.Z
+   ```
+
+2. Build the ISO. By default, the script reads the latest local release tag for the installer version and embeds the
+   `ghcr.io/spaceshaman/spaceos:auto` image so that the installed system continues tracking the automatic update
+   channel:
+
+   ```bash
+   ./scripts/build-installer-iso.sh
+   ```
+
+   To select a version explicitly, use `VERSION` without the leading `v`:
+
+   ```bash
+   VERSION=X.Y.Z ./scripts/build-installer-iso.sh
+   ```
+
+   `BASE_IMAGE`, `PAYLOAD_IMAGE`, `BUILDER_IMAGE`, and `OUTPUT_DIR` can also be overridden when testing a different
+   image or build environment.
+
+3. Verify the generated checksum:
+
+   ```bash
+   cd output/installer-vX.Y.Z
    sha256sum --check SpaceOS-vX.Y.Z-x86_64.iso.sha256
    ```
 
-3. Write the ISO to a USB drive using a tool such as Fedora Media Writer.
-4. Boot the computer from the prepared installation media.
-5. Complete the installation using the graphical Anaconda installer.
+4. Write the ISO to a USB drive using a tool such as Fedora Media Writer.
+5. Boot the computer from the prepared installation media.
+6. Complete the installation using the graphical Anaconda installer.
 
 The SpaceOS image used for installation is embedded in the ISO. After installation, the system tracks the `auto`
 channel in GHCR, so future updates do not require the installer media.
@@ -85,7 +111,7 @@ ghcr.io/spaceshaman/spaceos
 
 Publishing a new `vX.Y.Z` tag moves `stable`, `latest`, and `auto` to the new release. Once a week, GitHub Actions
 checks the digest of `quay.io/fedora/fedora-bootc:44`. If the base changed, the source of the latest SpaceOS release
-is rebuilt and `auto` is moved to the resulting image. Automatic rebuilds do not create an ISO or a GitHub Release.
+is rebuilt and `auto` is moved to the resulting image. GitHub Actions does not build or publish installer ISOs.
 
 All `vX.Y.Z` images remain in the registry. Only the five newest dated automatic rebuilds are retained.
 
