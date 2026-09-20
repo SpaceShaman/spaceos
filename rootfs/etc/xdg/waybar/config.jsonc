@@ -5,7 +5,7 @@
   "spacing": 6,
   "reload_style_on_change": true,
   "modules-left": ["sway/workspaces", "sway/window"],
-  "modules-right": ["tray", "network", "pulseaudio", "backlight", "battery", "clock"],
+  "modules-right": ["custom/spaceos-update", "tray", "network", "pulseaudio", "backlight", "battery", "clock"],
   "sway/workspaces": {
     "disable-scroll": true,
     "all-outputs": false,
@@ -43,6 +43,12 @@
     "format": "{icon} {capacity}%",
     "format-charging": "󰂄 {capacity}%",
     "format-icons": ["󰂎", "󰁺", "󰁼", "󰁾", "󰂀", "󰁹"]
+  },
+  "custom/spaceos-update": {
+    "exec": "/usr/libexec/spaceos-update-waybar",
+    "return-type": "json",
+    "interval": 60,
+    "tooltip": true
   },
   "clock": {
     "format": "{0:%d.%m.%Y} {0:%H:%M}",

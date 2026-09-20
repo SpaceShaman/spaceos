@@ -1,0 +1,35 @@
+#!/usr/bin/bash
+set -euo pipefail
+
+log() {
+    printf 'spaceos-update: %s\n' "$*"
+}
+
+if command -v nmcli >/dev/null 2>&1; then
+    if nmcli --terse --fields GENERAL.METERED device show 2>/dev/null \
+        | grep --quiet --extended-regexp ':(yes|guess-yes)$'; then
+        log 'skipping update on a metered connection'
+        exit 0
+    fi
+fi
+
+shopt -s nullglob
+for battery in /sys/class/power_supply/BAT*; do
+    [[ -r "$battery/capacity" && -r "$battery/status" ]] || continue
+    read -r capacity <"$battery/capacity"
+    read -r state <"$battery/status"
+    if [[ "$state" != Charging && "$state" != Full ]] && (( capacity < 30 )); then
+        log "skipping update: battery is at ${capacity}%"
+        exit 0
+    fi
+done
+
+read -r load _ </proc/loadavg
+cpus=$(nproc)
+if ! awk -v load="$load" -v cpus="$cpus" 'BEGIN { exit !(load <= cpus * 0.75) }'; then
+    log "skipping update: system load ${load} is too high"
+    exit 0
+fi
+
+log 'checking for and staging updates'
+exec bootc upgrade --quiet

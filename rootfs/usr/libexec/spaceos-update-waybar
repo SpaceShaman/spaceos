@@ -1,0 +1,23 @@
+#!/usr/bin/bash
+set -euo pipefail
+
+if ! status=$(bootc status --format=json 2>/dev/null); then
+    printf '{"text":"","class":"error","tooltip":"Unable to read the SpaceOS update status"}\n'
+    exit 0
+fi
+
+staged_version=$(jq -r '
+    .status.staged.image.version
+    // .status.staged.image.image
+    // .status.staged.image.digest
+    // empty
+' <<<"$status")
+
+if [[ -n "$staged_version" ]]; then
+    jq --compact-output --null-input \
+        --arg text '󰏗' \
+        --arg tooltip "SpaceOS ${staged_version} is ready. It will be applied at the next restart." \
+        '{text: $text, class: "ready", tooltip: $tooltip}'
+else
+    printf '{"text":"","class":"idle","tooltip":"SpaceOS is up to date"}\n'
+fi

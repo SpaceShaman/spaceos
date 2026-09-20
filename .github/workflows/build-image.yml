@@ -1,0 +1,123 @@
+name: Build SpaceOS image
+
+on:
+  workflow_call:
+    inputs:
+      source-ref:
+        description: Git ref containing the source to build
+        required: true
+        type: string
+      version:
+        description: SpaceOS version without the leading v
+        required: true
+        type: string
+      build-id:
+        description: Value written to BUILD_ID in os-release
+        required: true
+        type: string
+      channel:
+        description: Image channel label
+        required: true
+        type: string
+      base-image:
+        description: Digest-pinned Fedora bootc image
+        required: true
+        type: string
+      base-digest:
+        description: Fedora bootc image digest
+        required: true
+        type: string
+      tags:
+        description: Whitespace-separated image tags
+        required: true
+        type: string
+    outputs:
+      image:
+        description: Published GHCR image name
+        value: ${{ jobs.publish.outputs.image }}
+      digest:
+        description: Published image digest
+        value: ${{ jobs.publish.outputs.digest }}
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    outputs:
+      image: ${{ steps.names.outputs.image }}
+      digest: ${{ steps.push.outputs.digest }}
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          ref: ${{ inputs.source-ref }}
+
+      - name: Normalize image name
+        id: names
+        shell: bash
+        run: |
+          set -euo pipefail
+          repository=${GITHUB_REPOSITORY,,}
+          owner=${GITHUB_REPOSITORY_OWNER,,}
+          printf 'image=ghcr.io/%s\n' "$repository" >>"$GITHUB_OUTPUT"
+          printf 'registry=ghcr.io/%s\n' "$owner" >>"$GITHUB_OUTPUT"
+
+      - name: Read source revision
+        id: source
+        shell: bash
+        run: printf 'revision=%s\n' "$(git rev-parse HEAD)" >>"$GITHUB_OUTPUT"
+
+      - name: Log in to GHCR
+        uses: redhat-actions/podman-login@4934294ad0449894bcd1e9f191899d7292469603 # v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+
+      - name: Build bootc image
+        id: build
+        uses: redhat-actions/buildah-build@719e3c40d8af9790c23eca13f7daa339f2867034 # v3
+        with:
+          image: spaceos
+          tags: ${{ inputs.tags }}
+          containerfiles: ./Containerfile
+          context: .
+          layers: true
+          oci: true
+          build-args: |
+            BASE_IMAGE=${{ inputs.base-image }}
+            SPACEOS_VERSION=${{ inputs.version }}
+            SPACEOS_BUILD_ID=${{ inputs.build-id }}
+          labels: |
+            org.opencontainers.image.title=SpaceOS
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.revision=${{ steps.source.outputs.revision }}
+            org.opencontainers.image.version=${{ inputs.version }}
+            io.spaceos.channel=${{ inputs.channel }}
+            io.spaceos.base.digest=${{ inputs.base-digest }}
+
+      - name: Push image to GHCR
+        id: push
+        uses: redhat-actions/push-to-registry@94ade333c38ecc0e60e94785125d9a52ca423b37 # v3
+        with:
+          image: ${{ steps.build.outputs.image }}
+          tags: ${{ steps.build.outputs.tags }}
+          registry: ${{ steps.names.outputs.registry }}
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+
+      - name: Write build summary
+        shell: bash
+        run: |
+          {
+            printf '### Published SpaceOS image\n\n'
+            printf -- '- Image: `%s`\n' '${{ steps.names.outputs.image }}'
+            printf -- '- Tags: `%s`\n' '${{ inputs.tags }}'
+            printf -- '- Version: `%s`\n' '${{ inputs.version }}'
+            printf -- '- Fedora base: `%s`\n' '${{ inputs.base-digest }}'
+          } >>"$GITHUB_STEP_SUMMARY"

@@ -1,0 +1,142 @@
+name: Rebuild SpaceOS for Fedora updates
+
+on:
+  schedule:
+    - cron: "17 4 * * 1"
+  workflow_dispatch:
+    inputs:
+      force:
+        description: Build even when the Fedora base digest has not changed
+        required: false
+        default: false
+        type: boolean
+
+permissions: {}
+
+concurrency:
+  group: spaceos-publish
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      packages: read
+    outputs:
+      changed: ${{ steps.compare.outputs.changed }}
+      source-ref: ${{ steps.release.outputs.tag }}
+      version: ${{ steps.release.outputs.version }}
+      build-id: ${{ steps.names.outputs.build-id }}
+      dated-tag: ${{ steps.names.outputs.dated-tag }}
+      base-image: ${{ steps.base.outputs.image }}
+      base-digest: ${{ steps.base.outputs.digest }}
+    steps:
+      - name: Check out default branch and tags
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          fetch-depth: 0
+
+      - name: Find latest SpaceOS release
+        id: release
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag=$(scripts/latest-release-tag.sh)
+          printf 'tag=%s\n' "$tag" >>"$GITHUB_OUTPUT"
+          printf 'version=%s\n' "${tag#v}" >>"$GITHUB_OUTPUT"
+
+      - name: Install skopeo
+        shell: bash
+        run: |
+          if ! command -v skopeo >/dev/null 2>&1; then
+            sudo apt-get update
+            sudo apt-get install --yes skopeo
+          fi
+
+      - name: Log skopeo into GHCR
+        shell: bash
+        env:
+          GHCR_TOKEN: ${{ github.token }}
+        run: |
+          printf '%s' "$GHCR_TOKEN" | skopeo login ghcr.io \
+            --username "$GITHUB_ACTOR" --password-stdin
+
+      - name: Resolve Fedora base image
+        id: base
+        shell: bash
+        run: |
+          set -euo pipefail
+          image=$(scripts/resolve-base-image.sh quay.io/fedora/fedora-bootc:44)
+          printf 'image=%s\n' "$image" >>"$GITHUB_OUTPUT"
+          printf 'digest=%s\n' "${image##*@}" >>"$GITHUB_OUTPUT"
+
+      - name: Compare Fedora base digest
+        id: compare
+        shell: bash
+        env:
+          BASE_DIGEST: ${{ steps.base.outputs.digest }}
+          FORCE: ${{ inputs.force || 'false' }}
+        run: |
+          set -euo pipefail
+          image="ghcr.io/${GITHUB_REPOSITORY,,}:auto"
+          previous=''
+          if metadata=$(skopeo inspect "docker://${image}" 2>/dev/null); then
+            previous=$(jq -r '.Labels["io.spaceos.base.digest"] // empty' <<<"$metadata")
+          fi
+          if [[ "$FORCE" == true || "$previous" != "$BASE_DIGEST" ]]; then
+            printf 'changed=true\n' >>"$GITHUB_OUTPUT"
+          else
+            printf 'changed=false\n' >>"$GITHUB_OUTPUT"
+            printf 'Fedora base digest is unchanged: %s\n' "$BASE_DIGEST"
+          fi
+
+      - name: Generate automatic image names
+        id: names
+        if: steps.compare.outputs.changed == 'true'
+        shell: bash
+        env:
+          VERSION: ${{ steps.release.outputs.version }}
+          BASE_DIGEST: ${{ steps.base.outputs.digest }}
+        run: |
+          set -euo pipefail
+          date=$(date --utc +%Y%m%d)
+          short=${BASE_DIGEST#sha256:}
+          short=${short:0:12}
+          printf 'build-id=auto.%s.%s\n' "$date" "$short" >>"$GITHUB_OUTPUT"
+          printf 'dated-tag=auto-v%s-%s-%s\n' "$VERSION" "$date" "$short" >>"$GITHUB_OUTPUT"
+
+  image:
+    needs: prepare
+    if: needs.prepare.outputs.changed == 'true'
+    uses: ./.github/workflows/build-image.yml
+    permissions:
+      contents: read
+      packages: write
+    with:
+      source-ref: ${{ needs.prepare.outputs.source-ref }}
+      version: ${{ needs.prepare.outputs.version }}
+      build-id: ${{ needs.prepare.outputs.build-id }}
+      channel: auto
+      base-image: ${{ needs.prepare.outputs.base-image }}
+      base-digest: ${{ needs.prepare.outputs.base-digest }}
+      tags: ${{ format('{0} auto', needs.prepare.outputs.dated-tag) }}
+
+  prune:
+    needs: [prepare, image]
+    if: needs.prepare.outputs.changed == 'true' && needs.image.result == 'success'
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Check out scripts
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          ref: ${{ needs.prepare.outputs.source-ref }}
+
+      - name: Keep only five automatic Fedora rebuilds
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: scripts/prune-auto-images.sh "$GITHUB_REPOSITORY_OWNER" "${GITHUB_REPOSITORY#*/}" 5

@@ -1,0 +1,11 @@
+[Unit]
+Description=Check for SpaceOS updates hourly
+
+[Timer]
+OnCalendar=hourly
+Persistent=true
+RandomizedDelaySec=10m
+Unit=spaceos-update.service
+
+[Install]
+WantedBy=timers.target

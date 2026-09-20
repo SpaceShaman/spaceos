@@ -1,0 +1,17 @@
+[Unit]
+Description=Download and stage SpaceOS updates
+Documentation=https://github.com/SpaceShaman/spaceos
+Wants=network-online.target
+After=network-online.target
+StartLimitIntervalSec=1h
+StartLimitBurst=2
+
+[Service]
+Type=oneshot
+ExecStart=/usr/libexec/spaceos-update-automatic
+Nice=10
+IOSchedulingClass=idle
+CPUWeight=10
+IOWeight=10
+Restart=on-failure
+RestartSec=5m

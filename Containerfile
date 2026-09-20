@@ -1,5 +1,7 @@
 ARG FEDORA_VERSION=44
 ARG BASE_IMAGE=quay.io/fedora/fedora-bootc:${FEDORA_VERSION}
+ARG SPACEOS_VERSION=0.0.0-devel
+ARG SPACEOS_BUILD_ID=local
 
 # ============================================================
 # Build DisplayLink EVDI kernel module
@@ -56,6 +58,9 @@ RUN set -eux \
 # ============================================================
 
 FROM ${BASE_IMAGE}
+
+ARG SPACEOS_VERSION
+ARG SPACEOS_BUILD_ID
 
 COPY --from=displaylink-builder /out /tmp/displaylink
 
@@ -178,9 +183,20 @@ RUN set -eux \
 
 RUN fc-cache -f -v
 
-COPY os-release /usr/lib/os-release
-RUN ln -sfn ../usr/lib/os-release /etc/os-release
-RUN rm -f /etc/system-release \
+RUN printf '%s\n' \
+        'NAME="SpaceOS"' \
+        "VERSION=\"${SPACEOS_VERSION}\"" \
+        'ID=spaceos' \
+        'ID_LIKE=fedora' \
+        "VERSION_ID=\"${SPACEOS_VERSION}\"" \
+        "BUILD_ID=\"${SPACEOS_BUILD_ID}\"" \
+        "PRETTY_NAME=\"SpaceOS ${SPACEOS_VERSION}\"" \
+        'HOME_URL="https://github.com/SpaceShaman/spaceos"' \
+        'DOCUMENTATION_URL="https://github.com/SpaceShaman/spaceos"' \
+        'BUG_REPORT_URL="https://github.com/SpaceShaman/spaceos/issues"' \
+        >/usr/lib/os-release \
+    && ln -sfn ../usr/lib/os-release /etc/os-release \
+    && rm -f /etc/system-release \
     && printf 'SpaceOS\n' >/etc/system-release
 
 RUN systemctl enable greetd.service
