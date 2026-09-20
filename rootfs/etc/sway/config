@@ -8,6 +8,8 @@ set $mod Mod4
 set $term alacritty
 mouse_warping container
 
+exec_always --no-startup-id /etc/sway/scripts/layout.sh
+
 include config.d/theme/current.conf
 include config.d/outputs.conf
 include config.d/bindings.conf
