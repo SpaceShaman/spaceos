@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# greetd immediately starts a new greeter when the user's compositor exits.
+# During shutdown the compositor and greetd are stopped concurrently, leaving
+# a short window in which tuigreet would otherwise become visible.
+while :; do
+    state=$(systemctl is-system-running 2>/dev/null || true)
+
+    case "$state" in
+        running|degraded)
+            exec /usr/bin/tuigreet "$@"
+            ;;
+        *)
+            # Wait during both boot and shutdown. systemd will terminate this
+            # process as part of greetd.service when the machine is stopping.
+            sleep 0.2
+            ;;
+    esac
+done

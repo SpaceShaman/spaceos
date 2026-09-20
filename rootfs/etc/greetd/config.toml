@@ -2,5 +2,5 @@
 vt = 1
 
 [default_session]
-command = "/usr/bin/tuigreet --time --remember --cmd '/usr/bin/sway --unsupported-gpu'"
+command = "/usr/bin/spaceos-tuigreet --time --remember --cmd '/usr/bin/sway --unsupported-gpu'"
 user = "greetd"
