@@ -93,6 +93,49 @@ sudo reboot
 Back up important data before switching. SpaceOS contains configuration tailored to specific hardware and may
 change assumptions about services, the desktop, drivers, or the target system layout.
 
+### Installing to prepared filesystems
+
+Use [`bootc install to-filesystem`](https://bootc.dev/bootc/man/bootc-install-to-filesystem.8.html) to install SpaceOS on filesystems that have already been created and formatted. Replace the device paths below, verify them carefully, and run:
+
+```bash
+set -euo pipefail
+
+ROOT_DEVICE="/dev/ROOT_DEVICE"
+BOOT_DEVICE="/dev/BOOT_DEVICE"
+EFI_DEVICE="/dev/EFI_DEVICE"
+TARGET="/mnt/spaceos"
+IMAGE="ghcr.io/spaceshaman/spaceos:auto"
+
+sudo mkdir -p "$TARGET"
+sudo mount "$ROOT_DEVICE" "$TARGET"
+sudo mkdir -p "$TARGET/boot"
+sudo mount "$BOOT_DEVICE" "$TARGET/boot"
+sudo mkdir -p "$TARGET/boot/efi"
+sudo mount "$EFI_DEVICE" "$TARGET/boot/efi"
+
+findmnt -R "$TARGET"
+
+ROOT_UUID="$(sudo blkid -s UUID -o value "$ROOT_DEVICE")"
+BOOT_UUID="$(sudo blkid -s UUID -o value "$BOOT_DEVICE")"
+
+sudo podman pull "$IMAGE"
+sudo podman run --rm --privileged \
+  --pid=host \
+  --ipc=host \
+  --security-opt label=type:unconfined_t \
+  -v /dev:/dev \
+  -v /var/lib/containers:/var/lib/containers \
+  -v "${TARGET}:/target" \
+  "$IMAGE" \
+  bootc install to-filesystem \
+    --bootloader=grub \
+    --root-mount-spec="UUID=${ROOT_UUID}" \
+    --boot-mount-spec="UUID=${BOOT_UUID}" \
+    /target
+```
+
+The mounts select the root, `/boot`, and EFI filesystems, while the UUID options tell the installed system how to find root and `/boot` during startup. This example uses a separate `/boot`; other storage layouts may require different mount options or additional `--karg` arguments. Change `auto` to `stable` to follow official releases only.
+
 ## GHCR images and tags
 
 Images are published as:
