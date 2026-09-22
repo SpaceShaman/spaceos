@@ -229,7 +229,22 @@ RUN set -eux \
         --width 465 \
         --height 120 \
         --output /usr/share/plymouth/themes/spinner/watermark.png \
-        /usr/share/spaceos/spaceos-logo.svg
+        /usr/share/spaceos/spaceos-logo.svg \
+    && sed -i \
+        -e 's/^WatermarkHorizontalAlignment=.*/WatermarkHorizontalAlignment=.5/' \
+        -e 's/^WatermarkVerticalAlignment=.*/WatermarkVerticalAlignment=.36/' \
+        -e 's/^DialogHorizontalAlignment=.*/DialogHorizontalAlignment=.5/' \
+        -e 's/^DialogVerticalAlignment=.*/DialogVerticalAlignment=.53/' \
+        -e 's/^HorizontalAlignment=.*/HorizontalAlignment=.5/' \
+        -e 's/^VerticalAlignment=.*/VerticalAlignment=.68/' \
+        /usr/share/plymouth/themes/spinner/spinner.plymouth \
+    && grep -q '^WatermarkVerticalAlignment=.36$' \
+        /usr/share/plymouth/themes/spinner/spinner.plymouth \
+    && grep -q '^DialogVerticalAlignment=.53$' \
+        /usr/share/plymouth/themes/spinner/spinner.plymouth \
+    && grep -q '^VerticalAlignment=.68$' \
+        /usr/share/plymouth/themes/spinner/spinner.plymouth \
+    && plymouth-set-default-theme spinner
 
 RUN fc-cache -f -v
 
@@ -272,10 +287,10 @@ RUN printf '%s\n' \
 # ============================================================
 
 RUN systemctl enable \
-        displaylink.service \
-        docker.service \
-        containerd.service \
-        greetd.service \
+    displaylink.service \
+    docker.service \
+    containerd.service \
+    greetd.service \
     && systemctl set-default graphical.target
 
 RUN bootc container lint
