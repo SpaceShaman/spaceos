@@ -72,8 +72,12 @@ RUN set -eux \
         -mindepth 1 -maxdepth 1 -type d \
         -printf '%f\n' | head -n1)" \
     && depmod -a "${KERNEL_VERSION}" \
-    && systemctl enable displaylink.service \
     && rm -rf /tmp/displaylink
+
+
+# ============================================================
+# Package repositories
+# ============================================================
 
 ARG CHATGPT_RPM_URL=https://persistent.oaistatic.com/codex-app-prod/linux/rpm/latest/chatgpt.x86_64.rpm
 
@@ -82,23 +86,32 @@ ADD --checksum=sha256:b80dd8b308a675c23d7263b34c52d6b3886a4e05257c1f8d4f3c0c5cd2
 
 ADD --chmod=0644 \
     https://repo.teamsforlinux.de/teams-for-linux.asc /etc/pki/rpm-gpg/teams-for-linux.asc
-RUN rpm --import /etc/pki/rpm-gpg/teams-for-linux.asc
 
-RUN dnf5 install -y \
-    'dnf5-command(config-manager)' \
-    'dnf5-command(copr)' \
+RUN set -eux \
+    && rpm --import /etc/pki/rpm-gpg/teams-for-linux.asc \
+    && dnf5 install -y \
+        'dnf5-command(config-manager)' \
     && dnf5 config-manager addrepo \
         --from-repofile https://download.docker.com/linux/fedora/docker-ce.repo \
     && dnf5 config-manager addrepo \
-        --from-repofile https://repo.teamsforlinux.de/rpm/teams-for-linux.repo \
-    && dnf5 copr enable -y dejan/lazygit \
+        --from-repofile https://repo.teamsforlinux.de/rpm/teams-for-linux.repo
+
+
+# ============================================================
+# Fedora and RPM packages
+# ============================================================
+
+RUN set -eux \
+    && : "Firmware" \
     && dnf5 install -y --allow-downgrade --allowerasing \
         linux-firmware-whence \
         iwlwifi-mvm-firmware \
+    && : "System and desktop" \
     && dnf5 install -y \
         glibc-langpack-pl \
         linux-firmware \
         NetworkManager-wifi \
+        fuse-libs \
         greetd \
         greetd-selinux \
         tuigreet \
@@ -112,40 +125,49 @@ RUN dnf5 install -y \
         xdg-desktop-portal-gtk \
         wiremix \
         brightnessctl \
-        jq \
         rofi \
         alacritty \
+        grim \
+        slurp \
+        swappy \
+    && : "Development and command-line tools" \
+    && dnf5 install -y \
+        jq \
         fish \
         nvim \
         mc \
         git \
+        tmux \
+        golang \
+        uv \
+        rclone \
+        rsync \
+    && : "Container tools" \
+    && dnf5 install -y \
         podman \
-        fuse-libs \
         docker-ce \
         docker-ce-cli \
         containerd.io \
         docker-buildx-plugin \
         docker-compose-plugin \
+    && : "Desktop applications" \
+    && dnf5 install -y \
         firefox \
-        tmux \
-        lazygit \
-        golang \
         "${CHATGPT_RPM_URL}" \
         /tmp/bruno.rpm \
-        uv \
-        grim \
-        slurp \
-        swappy \
         teams-for-linux \
         thunderbird \
         qbittorrent \
         vlc \
         gimp \
         filezilla \
-        rclone \
-        rsync
-RUN rm -f /tmp/bruno.rpm \
+    && rm -f /tmp/bruno.rpm \
     && dnf5 clean all
+
+
+# ============================================================
+# Standalone applications and tools
+# ============================================================
 
 ADD --chmod=0755 \
     https://updates.signal.org/desktop/signal-desktop.AppImage /usr/bin/signal-desktop
@@ -156,18 +178,21 @@ ADD --chmod=0644 \
 ADD --checksum=sha256:50b2f0a8c533d607e5a8a1f478fe78d5585317178bd86456659c049965a8945d \
     https://github.com/zk-org/zk/releases/download/v0.15.6/zk-v0.15.6-linux-amd64.tar.gz /tmp/zk.tar.gz
 
+ADD --checksum=sha256:02beacbcda0fa342e50ae3480ba8147307353af3fb28e1d5f790e02329c201a6 \
+    https://github.com/jesseduffield/lazygit/releases/download/v0.65.1/lazygit_0.65.1_linux_x86_64.tar.gz /tmp/lazygit.tar.gz
+
 RUN set -eux \
     && tar -xzf /tmp/zk.tar.gz -C /usr/bin zk \
-    && chmod 0755 /usr/bin/zk \
+    && tar -xzf /tmp/lazygit.tar.gz -C /usr/bin lazygit \
+    && chmod 0755 /usr/bin/zk /usr/bin/lazygit \
     && zk --version \
-    && rm -f /tmp/zk.tar.gz
+    && lazygit --version \
+    && rm -f /tmp/zk.tar.gz /tmp/lazygit.tar.gz
 
-RUN systemctl enable \
-    docker.service \
-    containerd.service
 
-ADD --chmod=0644 \
-    https://raw.githubusercontent.com/googlefonts/noto-emoji/v2.051/fonts/NotoColorEmoji.ttf /usr/share/fonts/noto-emoji/NotoColorEmoji.ttf
+# ============================================================
+# Global npm tools
+# ============================================================
 
 RUN set -eux \
     && mkdir -p /tmp/npm-cache \
@@ -179,17 +204,39 @@ RUN set -eux \
         opencommit \
     && rm -rf /tmp/npm-cache
 
+
+# ============================================================
+# System configuration
+# ============================================================
+
 COPY kargs.d/ /usr/lib/bootc/kargs.d/
 
 COPY . /etc/spaceos/
 RUN cp -asf --remove-destination /etc/spaceos/rootfs/. /
+
+
+# ============================================================
+# Branding and fonts
+# ============================================================
+
+COPY assets/spaceos-logo.svg /usr/share/spaceos/spaceos-logo.svg
+
+ADD --chmod=0644 \
+    https://raw.githubusercontent.com/googlefonts/noto-emoji/v2.051/fonts/NotoColorEmoji.ttf /usr/share/fonts/noto-emoji/NotoColorEmoji.ttf
 
 RUN set -eux \
     && rsvg-convert \
         --width 465 \
         --height 120 \
         --output /usr/share/plymouth/themes/spinner/watermark.png \
-        /usr/share/pixmaps/spaceos-logo.svg
+        /usr/share/spaceos/spaceos-logo.svg
+
+RUN fc-cache -f -v
+
+
+# ============================================================
+# Initramfs
+# ============================================================
 
 RUN set -eux \
     && KERNEL_VERSION="$(find /usr/lib/modules \
@@ -198,7 +245,10 @@ RUN set -eux \
     && env DRACUT_NO_XATTR=1 \
         dracut -vf "/usr/lib/modules/${KERNEL_VERSION}/initramfs.img" "${KERNEL_VERSION}"
 
-RUN fc-cache -f -v
+
+# ============================================================
+# OS metadata
+# ============================================================
 
 RUN printf '%s\n' \
     'NAME="SpaceOS"' \
@@ -216,7 +266,16 @@ RUN printf '%s\n' \
     && rm -f /etc/system-release \
     && printf 'SpaceOS\n' >/etc/system-release
 
-RUN systemctl enable greetd.service
-RUN systemctl set-default graphical.target
+
+# ============================================================
+# Services and validation
+# ============================================================
+
+RUN systemctl enable \
+        displaylink.service \
+        docker.service \
+        containerd.service \
+        greetd.service \
+    && systemctl set-default graphical.target
 
 RUN bootc container lint

@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/spaceos-logo.svg" alt="SpaceOS" width="465">
+</p>
+
 # SpaceOS
 
 SpaceOS is a personal image-based Linux distribution built on Fedora Bootc 44. It uses Sway as its graphical
