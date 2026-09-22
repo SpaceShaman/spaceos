@@ -1,7 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="155" height="40" viewBox="0 13 677 175">
   <title>SpaceOS</title>
 
-  <g color="#fcfcfc" fill="currentColor">
+  <style>
+    .logo { color: #fcfcfc; }
+    #gh-light-mode-only:target ~ .logo { color: #0f1419; }
+  </style>
+
+  <g id="gh-light-mode-only"/>
+  <g id="gh-dark-mode-only"/>
+
+  <g class="logo" fill="currentColor">
     <g transform="translate(-25.584)" fill="none" stroke="currentColor"
        stroke-linecap="round" stroke-linejoin="round">
       <path d="M100 18C52 18 27 50 31 94c4 42 29 73 69 89 40-16 65-47 69-89 4-44-21-76-69-76Z"
