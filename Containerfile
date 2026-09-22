@@ -77,6 +77,9 @@ RUN set -eux \
 
 ARG CHATGPT_RPM_URL=https://persistent.oaistatic.com/codex-app-prod/linux/rpm/latest/chatgpt.x86_64.rpm
 
+ADD --checksum=sha256:b80dd8b308a675c23d7263b34c52d6b3886a4e05257c1f8d4f3c0c5cd23a31f4 \
+    https://github.com/usebruno/bruno/releases/download/v4.1.0/bruno_4.1.0_x86_64_linux.rpm /tmp/bruno.rpm
+
 ADD --chmod=0644 \
     https://repo.teamsforlinux.de/teams-for-linux.asc /etc/pki/rpm-gpg/teams-for-linux.asc
 RUN rpm --import /etc/pki/rpm-gpg/teams-for-linux.asc
@@ -128,6 +131,7 @@ RUN dnf5 install -y \
         lazygit \
         golang \
         "${CHATGPT_RPM_URL}" \
+        /tmp/bruno.rpm \
         uv \
         grim \
         slurp \
@@ -140,13 +144,23 @@ RUN dnf5 install -y \
         filezilla \
         rclone \
         rsync
-RUN dnf5 clean all
+RUN rm -f /tmp/bruno.rpm \
+    && dnf5 clean all
 
 ADD --chmod=0755 \
     https://updates.signal.org/desktop/signal-desktop.AppImage /usr/bin/signal-desktop
 
 ADD --chmod=0644 \
     https://raw.githubusercontent.com/signalapp/Signal-Desktop/main/build/icons/png/512x512.png /usr/share/icons/hicolor/512x512/apps/signal-desktop.png
+
+ADD --checksum=sha256:50b2f0a8c533d607e5a8a1f478fe78d5585317178bd86456659c049965a8945d \
+    https://github.com/zk-org/zk/releases/download/v0.15.6/zk-v0.15.6-linux-amd64.tar.gz /tmp/zk.tar.gz
+
+RUN set -eux \
+    && tar -xzf /tmp/zk.tar.gz -C /usr/bin zk \
+    && chmod 0755 /usr/bin/zk \
+    && zk --version \
+    && rm -f /tmp/zk.tar.gz
 
 RUN systemctl enable \
     docker.service \
