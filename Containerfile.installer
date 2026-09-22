@@ -31,7 +31,7 @@ RUN mkdir -p /boot/efi \
     && cp -ra /usr/lib/efi/*/*/EFI /boot/efi
 
 COPY installer-rootfs/ /
-COPY assets/spaceos-logo.svg /usr/share/anaconda/pixmaps/spaceos-logo.svg
+COPY assets/spaceos-logo-dark.svg /usr/share/anaconda/pixmaps/spaceos-logo.svg
 
 RUN printf '%s\n' \
         'NAME="SpaceOS Installer"' \

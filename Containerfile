@@ -219,7 +219,7 @@ RUN cp -asf --remove-destination /etc/spaceos/rootfs/. /
 # Branding and fonts
 # ============================================================
 
-COPY assets/spaceos-logo.svg /usr/share/spaceos/spaceos-logo.svg
+COPY assets/spaceos-logo-dark.svg /usr/share/spaceos/spaceos-logo.svg
 
 ADD --chmod=0644 \
     https://raw.githubusercontent.com/googlefonts/noto-emoji/v2.051/fonts/NotoColorEmoji.ttf /usr/share/fonts/noto-emoji/NotoColorEmoji.ttf
