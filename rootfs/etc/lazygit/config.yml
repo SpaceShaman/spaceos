@@ -1,0 +1,10 @@
+keybinding:
+  universal:
+    prevItem-alt: l
+    nextItem-alt: k
+    scrollLeft: <left>
+    scrollRight: <right>
+    prevBlock-alt: j
+    nextBlock-alt: ;
+    scrollUpMain-alt1: L
+    scrollDownMain-alt1: K

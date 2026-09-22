@@ -136,7 +136,10 @@ RUN dnf5 install -y \
         thunderbird \
         qbittorrent \
         vlc \
-        gimp
+        gimp \
+        filezilla \
+        rclone \
+        rsync
 RUN dnf5 clean all
 
 ADD --chmod=0755 \
@@ -184,17 +187,17 @@ RUN set -eux \
 RUN fc-cache -f -v
 
 RUN printf '%s\n' \
-        'NAME="SpaceOS"' \
-        "VERSION=\"${SPACEOS_VERSION}\"" \
-        'ID=spaceos' \
-        'ID_LIKE=fedora' \
-        "VERSION_ID=\"${SPACEOS_VERSION}\"" \
-        "BUILD_ID=\"${SPACEOS_BUILD_ID}\"" \
-        "PRETTY_NAME=\"SpaceOS ${SPACEOS_VERSION}\"" \
-        'HOME_URL="https://github.com/SpaceShaman/spaceos"' \
-        'DOCUMENTATION_URL="https://github.com/SpaceShaman/spaceos"' \
-        'BUG_REPORT_URL="https://github.com/SpaceShaman/spaceos/issues"' \
-        >/usr/lib/os-release \
+    'NAME="SpaceOS"' \
+    "VERSION=\"${SPACEOS_VERSION}\"" \
+    'ID=spaceos' \
+    'ID_LIKE=fedora' \
+    "VERSION_ID=\"${SPACEOS_VERSION}\"" \
+    "BUILD_ID=\"${SPACEOS_BUILD_ID}\"" \
+    "PRETTY_NAME=\"SpaceOS ${SPACEOS_VERSION}\"" \
+    'HOME_URL="https://github.com/SpaceShaman/spaceos"' \
+    'DOCUMENTATION_URL="https://github.com/SpaceShaman/spaceos"' \
+    'BUG_REPORT_URL="https://github.com/SpaceShaman/spaceos/issues"' \
+    >/usr/lib/os-release \
     && ln -sfn ../usr/lib/os-release /etc/os-release \
     && rm -f /etc/system-release \
     && printf 'SpaceOS\n' >/etc/system-release
