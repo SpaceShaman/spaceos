@@ -1,5 +1,6 @@
 ARG FEDORA_VERSION=44
 ARG BASE_IMAGE=quay.io/fedora/fedora-bootc:${FEDORA_VERSION}
+ARG FEDORA_SIGNING_KEY_ID=6d9f90a6
 ARG SPACEOS_VERSION=0.0.0-devel
 ARG SPACEOS_BUILD_ID=local
 
@@ -9,48 +10,14 @@ ARG SPACEOS_BUILD_ID=local
 
 FROM ${BASE_IMAGE} AS displaylink-builder
 
+ARG FEDORA_VERSION
+ARG FEDORA_SIGNING_KEY_ID
+
 ADD https://negativo17.org/repos/fedora-multimedia.repo /etc/yum.repos.d/negativo17-fedora-multimedia.repo
 
-RUN set -eux \
-    && KERNEL_VERSION="$(find /usr/lib/modules \
-        -mindepth 1 -maxdepth 1 -type d \
-        -printf '%f\n' | head -n1)" \
-    && echo "Building EVDI for kernel: ${KERNEL_VERSION}" \
-    # fedora-repos-archive is important when the bootc image
-    # contains a kernel slightly older than the current Fedora repos.
-    && dnf5 -y install \
-        fedora-repos-archive \
-        akmods \
-        gcc \
-        gcc-c++ \
-        make \
-        dnf5-plugins \
-        "kernel-devel-${KERNEL_VERSION}" \
-    && dnf5 -y install \
-        kmod-evdi \
-        akmod-evdi \
-    # UBlue explicitly uses these flags for EVDI.
-    && export CFLAGS="-fno-pie -no-pie" \
-    && akmods \
-        --force \
-        --kernels "${KERNEL_VERSION}" \
-        --kmod evdi \
-    # Fail the image build if EVDI was not actually produced.
-    && modinfo \
-        "/usr/lib/modules/${KERNEL_VERSION}/extra/evdi/evdi.ko.xz" \
-    # Keep only the resulting binary kmod RPM.
-    && mkdir -p /out/kmod \
-    && find /var/cache/akmods/evdi \
-        -type f \
-        -name '*.rpm' \
-        -exec cp -v -t /out/kmod/ {} + \
-    # Download userspace part of DisplayLink.
-    && mkdir -p /out/userspace \
-    && dnf5 download \
-        --destdir=/out/userspace \
-        libevdi \
-        displaylink \
-    && find /out -type f -print
+COPY --chmod=0755 scripts/build-displaylink.sh /usr/local/bin/build-displaylink
+
+RUN build-displaylink "${FEDORA_VERSION}" "${FEDORA_SIGNING_KEY_ID}"
 
 
 # ============================================================
