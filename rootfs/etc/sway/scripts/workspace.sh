@@ -3,13 +3,11 @@ set -eu
 
 action=${1:?expected normalize, focus or move}
 case "$action" in
-    normalize) ;;
-    focus|move)
-        direction=${2:?expected prev or next}
-        case "$direction" in prev|next) ;; *) exit 2 ;; esac
-        ;;
+    normalize) direction= ;;
+    focus|move) direction=${2:?expected prev or next} ;;
     *) exit 2 ;;
 esac
+[ "$action" = normalize ] || case "$direction" in prev|next) ;; *) exit 2 ;; esac
 
 exec 9>"${XDG_RUNTIME_DIR:-/tmp}/spaceos-workspaces.lock"
 flock 9
@@ -40,16 +38,22 @@ EOF
     done
 }
 
-shift_up() {
-    output=$1
-    base=$2
-    names=$(names_for_output "$output")
-    printf '%s\n' "$names" | sort -t: -k2,2nr | while IFS= read -r old; do
+shift_workspaces_up() {
+    names_for_output "$1" | sort -t: -k2,2nr | while IFS= read -r old; do
         [ -n "$old" ] || continue
         number=${old#*:}
-        new="$((base + number + 1)):$((number + 1))"
+        new="$(( $2 + number + 1 )):$((number + 1))"
         swaymsg -- "rename workspace $old to $new" >/dev/null
     done
+}
+
+switch_to() {
+    if [ "$action" = move ]; then
+        swaymsg -- "move container to workspace $1; workspace $1" >/dev/null
+    else
+        swaymsg -- "workspace $1" >/dev/null
+    fi
+    normalize
 }
 
 normalize
@@ -72,29 +76,20 @@ if [ "$direction" = prev ] && [ "$local_number" -eq 1 ]; then
     if [ "$action" = move ] && [ "$windows" -le 1 ]; then
         exit 0
     fi
-    shift_up "$output" "$base"
-    target="$((base + 1)):1"
-    if [ "$action" = move ]; then
-        swaymsg -- "move container to workspace $target; workspace $target" >/dev/null
-    else
-        swaymsg -- "workspace $target" >/dev/null
-    fi
+    shift_workspaces_up "$output" "$base"
+    switch_to "$((base + 1)):1"
     exit 0
 fi
 
-if [ "$direction" = next ]; then
-    local_number=$((local_number + 1))
-else
-    local_number=$((local_number - 1))
-fi
+case "$direction" in
+    next) local_number=$((local_number + 1)) ;;
+    prev) local_number=$((local_number - 1)) ;;
+esac
 target="$((base + local_number)):$local_number"
 target_exists=$(swaymsg -t get_workspaces -r | jq -r --arg target "$target" --arg output "$output" \
     'any(.[]; .name == $target and .output == $output)')
 
-if [ "$action" = move ]; then
-    [ "$windows" -gt 1 ] || [ "$target_exists" = true ] || exit 0
-    swaymsg -- "move container to workspace $target; workspace $target" >/dev/null
-else
-    [ "$windows" -gt 0 ] || [ "$target_exists" = true ] || exit 0
-    swaymsg -- "workspace $target" >/dev/null
-fi
+minimum_windows=0
+[ "$action" = move ] && minimum_windows=1
+[ "$windows" -gt "$minimum_windows" ] || [ "$target_exists" = true ] || exit 0
+switch_to "$target"
