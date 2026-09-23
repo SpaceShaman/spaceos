@@ -8,7 +8,6 @@ if status is-interactive
   ssh-add -l >/dev/null 2>&1; or ssh-add -q ~/.ssh/id_ed25519 >/dev/null 2>&1
   export EDITOR=nvim
   export ZK_NOTEBOOK_DIR="$HOME/notes"
-  alias g=sgpt
   alias c=oco
   alias wiremix='wiremix --config /etc/wiremix/wiremix.toml'
   alias mix=wiremix
@@ -42,4 +41,15 @@ if status is-interactive
   alias bd='b disconnect'
   # Restart Pipewire
   alias pw='systemctl --user restart wireplumber pipewire pipewire-pulse'
+
+  function g
+    set -l common_args --ephemeral --skip-git-repo-check --sandbox read-only
+
+    if test (count $argv) -gt 0
+      set -l prompt (string join ' ' -- $argv)
+      codex exec $common_args "$prompt" 2>/dev/null
+    else
+      codex exec $common_args - 2>/dev/null
+    end
+  end
 end
