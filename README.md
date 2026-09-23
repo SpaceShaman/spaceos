@@ -208,62 +208,62 @@ dependencies inherited from the Fedora base image.
 
 | Software | Description |
 |---|---|
-| Sway | Tiling Wayland compositor compatible with the i3 configuration model. |
-| Waybar | Status bar showing workspaces, network, audio, battery, and update state. |
-| Rofi | Application launcher. |
-| Alacritty | GPU-accelerated terminal emulator. |
-| greetd + tuigreet | Lightweight login manager used to start the Sway session. |
-| Ayu Dark / Ayu Light | Matching GTK, terminal, Waybar, and Rofi themes. |
-| Plymouth | Graphical boot screen, including the LUKS unlock prompt. |
+| [Sway](https://github.com/swaywm/sway) | Tiling Wayland compositor compatible with the i3 configuration model. |
+| [Waybar](https://github.com/Alexays/Waybar) | Status bar showing workspaces, network, audio, battery, and update state. |
+| [Rofi](https://github.com/davatorium/rofi) | Application launcher. |
+| [Alacritty](https://github.com/alacritty/alacritty) | GPU-accelerated terminal emulator. |
+| [greetd](https://git.sr.ht/~kennylevinsen/greetd) + [tuigreet](https://github.com/apognu/tuigreet) | Lightweight login manager used to start the Sway session. |
+| [Ayu Dark / Ayu Light](https://github.com/dnordstrom/ayu-theme) | Matching GTK, terminal, Waybar, and Rofi themes. |
+| [Plymouth](https://www.freedesktop.org/wiki/Software/Plymouth/) | Graphical boot screen, including the LUKS unlock prompt. |
 
 ### Applications
 
 | Software | Description |
 |---|---|
-| Firefox | Web browser. |
-| Thunderbird | Email and calendar client. |
-| Signal Desktop | Signal messenger distributed as an AppImage. |
-| Teams for Linux | Unofficial Microsoft Teams client. |
-| ChatGPT | ChatGPT desktop application for Linux. |
-| Bruno | API client for designing and testing HTTP requests. |
-| qBittorrent | BitTorrent client. |
-| VLC | Multimedia player. |
-| GIMP | Raster graphics editor. |
-| FileZilla | FTP, FTPS, and SFTP client. |
+| [Firefox](https://www.firefox.com/) | Web browser. |
+| [Thunderbird](https://github.com/mozilla/releases-comm-central) | Email and calendar client. |
+| [Signal Desktop](https://github.com/signalapp/Signal-Desktop) | Signal messenger distributed as an AppImage. |
+| [Teams for Linux](https://github.com/IsmaelMartinez/teams-for-linux) | Unofficial Microsoft Teams client. |
+| [ChatGPT](https://chatgpt.com/download) | ChatGPT desktop application for Linux. |
+| [Bruno](https://github.com/usebruno/bruno) | API client for designing and testing HTTP requests. |
+| [qBittorrent](https://github.com/qbittorrent/qBittorrent) | BitTorrent client. |
+| [VLC](https://github.com/videolan/vlc) | Multimedia player. |
+| [GIMP](https://github.com/GNOME/gimp) | Raster graphics editor. |
+| [FileZilla](https://filezilla-project.org/) | FTP, FTPS, and SFTP client. |
 
 ### Terminal and development
 
 | Software | Description |
 |---|---|
-| Fish | Interactive shell with rich suggestions and completions. |
-| Neovim | Text editor with the SpaceOS development configuration. |
-| tmux | Terminal multiplexer. |
-| Midnight Commander | Two-panel terminal file manager. |
-| Git | Version control system. |
-| lazygit | Terminal user interface for Git. |
-| Go | Go compiler and development toolchain. |
-| uv | Fast Python project and package manager. |
-| rclone | Command-line sync tool for cloud storage and remote filesystems. |
-| rsync | Efficient local and remote file synchronization utility. |
-| zk | Plain-text note-taking assistant with a Zettelkasten workflow. |
-| jq | Command-line JSON processor. |
-| Codex | OpenAI coding agent for the terminal. |
-| GitHub Copilot CLI | GitHub coding assistant for the terminal. |
-| opencommit | Generates commit messages from staged changes. |
+| [Fish](https://github.com/fish-shell/fish-shell) | Interactive shell with rich suggestions and completions. |
+| [Neovim](https://github.com/neovim/neovim) | Text editor with the SpaceOS development configuration. |
+| [tmux](https://github.com/tmux/tmux) | Terminal multiplexer. |
+| [Midnight Commander](https://github.com/MidnightCommander/mc) | Two-panel terminal file manager. |
+| [Git](https://github.com/git/git) | Version control system. |
+| [lazygit](https://github.com/jesseduffield/lazygit) | Terminal user interface for Git. |
+| [Go](https://github.com/golang/go) | Go compiler and development toolchain. |
+| [uv](https://github.com/astral-sh/uv) | Fast Python project and package manager. |
+| [rclone](https://github.com/rclone/rclone) | Command-line sync tool for cloud storage and remote filesystems. |
+| [rsync](https://github.com/RsyncProject/rsync) | Efficient local and remote file synchronization utility. |
+| [zk](https://github.com/zk-org/zk) | Plain-text note-taking assistant with a Zettelkasten workflow. |
+| [jq](https://github.com/jqlang/jq) | Command-line JSON processor. |
+| [Codex](https://github.com/openai/codex) | OpenAI coding agent for the terminal. |
+| [GitHub Copilot CLI](https://github.com/github/copilot-cli) | GitHub coding assistant for the terminal. |
+| [opencommit](https://github.com/di-sukharev/opencommit) | Generates commit messages from staged changes. |
 
 ### Containers and system tools
 
 | Software | Description |
 |---|---|
-| Podman | Daemonless OCI container runtime and image builder. |
-| Docker Engine and CLI | Container environment compatible with the Docker ecosystem. |
-| Docker Buildx | Extended container image build tooling. |
-| Docker Compose | Definition and orchestration of multi-container environments. |
-| Wiremix | Terminal mixer for PipeWire. |
-| brightnessctl | Display brightness control. |
-| grim + slurp + swappy | Wayland screenshot capture, region selection, and annotation. |
-| SpaceOS Update | Custom automatic scheduling and status integration around native bootc updates. |
-| DisplayLink/EVDI | Support for DisplayLink adapters and docking stations. |
+| [Podman](https://github.com/containers/podman) | Daemonless OCI container runtime and image builder. |
+| [Docker Engine](https://github.com/moby/moby) and [CLI](https://github.com/docker/cli) | Container environment compatible with the Docker ecosystem. |
+| [Docker Buildx](https://github.com/docker/buildx) | Extended container image build tooling. |
+| [Docker Compose](https://github.com/docker/compose) | Definition and orchestration of multi-container environments. |
+| [Wiremix](https://github.com/tsowell/wiremix) | Terminal mixer for PipeWire. |
+| [brightnessctl](https://github.com/Hummer12007/brightnessctl) | Display brightness control. |
+| [grim](https://github.com/emersion/grim) + [slurp](https://github.com/emersion/slurp) + [swappy](https://github.com/jtheoof/swappy) | Wayland screenshot capture, region selection, and annotation. |
+| [SpaceOS Update](https://github.com/SpaceShaman/spaceos) | Custom automatic scheduling and status integration around native bootc updates. |
+| [DisplayLink](https://www.synaptics.com/products/displaylink-graphics) / [EVDI](https://github.com/DisplayLink/evdi) | Support for DisplayLink adapters and docking stations. |
 
 ## Keyboard shortcuts
 
