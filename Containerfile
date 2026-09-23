@@ -59,9 +59,6 @@ RUN set -eux \
 
 FROM ${BASE_IMAGE}
 
-ARG SPACEOS_VERSION
-ARG SPACEOS_BUILD_ID
-
 COPY --from=displaylink-builder /out /tmp/displaylink
 
 RUN set -eux \
@@ -264,6 +261,9 @@ RUN set -eux \
 # ============================================================
 # OS metadata
 # ============================================================
+
+ARG SPACEOS_VERSION
+ARG SPACEOS_BUILD_ID
 
 RUN printf '%s\n' \
     'NAME="SpaceOS"' \

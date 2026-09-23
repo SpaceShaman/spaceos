@@ -46,7 +46,7 @@ permissions:
 jobs:
   publish:
     runs-on: ubuntu-24.04
-    timeout-minutes: 120
+    timeout-minutes: 240
     outputs:
       image: ${{ steps.names.outputs.image }}
       digest: ${{ steps.push.outputs.digest }}
@@ -87,9 +87,11 @@ jobs:
           tags: ${{ inputs.tags }}
           containerfiles: ./Containerfile
           context: .
-          buildah-image: quay.io/containers/buildah@sha256:4b7855d4f64bf536ea2f4591d4550d9a8feda3720b9fb25d39a889f5dc209769 # v1.43.4
           layers: true
           oci: true
+          extra-args: |
+            --cache-from ${{ steps.names.outputs.registry }}/spaceos-build-cache
+            --cache-to ${{ steps.names.outputs.registry }}/spaceos-build-cache
           build-args: |
             BASE_IMAGE=${{ inputs.base-image }}
             SPACEOS_VERSION=${{ inputs.version }}
