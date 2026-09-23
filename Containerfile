@@ -45,8 +45,12 @@ RUN set -eux \
 
 ARG CHATGPT_RPM_URL=https://persistent.oaistatic.com/codex-app-prod/linux/rpm/latest/chatgpt.x86_64.rpm
 
-ADD --checksum=sha256:b80dd8b308a675c23d7263b34c52d6b3886a4e05257c1f8d4f3c0c5cd23a31f4 \
-    https://github.com/usebruno/bruno/releases/download/v4.1.0/bruno_4.1.0_x86_64_linux.rpm /tmp/bruno.rpm
+ADD https://github.com/usebruno/bruno/releases/download/v4.1.0/bruno_4.1.0_x86_64_linux.rpm /tmp/bruno.rpm
+
+RUN printf '%s  %s\n' \
+        b80dd8b308a675c23d7263b34c52d6b3886a4e05257c1f8d4f3c0c5cd23a31f4 \
+        /tmp/bruno.rpm \
+    | sha256sum --check --strict
 
 ADD --chmod=0644 \
     https://repo.teamsforlinux.de/teams-for-linux.asc /etc/pki/rpm-gpg/teams-for-linux.asc
@@ -139,13 +143,17 @@ ADD --chmod=0755 \
 ADD --chmod=0644 \
     https://raw.githubusercontent.com/signalapp/Signal-Desktop/main/build/icons/png/512x512.png /usr/share/icons/hicolor/512x512/apps/signal-desktop.png
 
-ADD --checksum=sha256:50b2f0a8c533d607e5a8a1f478fe78d5585317178bd86456659c049965a8945d \
-    https://github.com/zk-org/zk/releases/download/v0.15.6/zk-v0.15.6-linux-amd64.tar.gz /tmp/zk.tar.gz
+ADD https://github.com/zk-org/zk/releases/download/v0.15.6/zk-v0.15.6-linux-amd64.tar.gz /tmp/zk.tar.gz
 
-ADD --checksum=sha256:02beacbcda0fa342e50ae3480ba8147307353af3fb28e1d5f790e02329c201a6 \
-    https://github.com/jesseduffield/lazygit/releases/download/v0.65.1/lazygit_0.65.1_linux_x86_64.tar.gz /tmp/lazygit.tar.gz
+ADD https://github.com/jesseduffield/lazygit/releases/download/v0.65.1/lazygit_0.65.1_linux_x86_64.tar.gz /tmp/lazygit.tar.gz
 
 RUN set -eux \
+    && printf '%s  %s\n' \
+        50b2f0a8c533d607e5a8a1f478fe78d5585317178bd86456659c049965a8945d \
+        /tmp/zk.tar.gz \
+        02beacbcda0fa342e50ae3480ba8147307353af3fb28e1d5f790e02329c201a6 \
+        /tmp/lazygit.tar.gz \
+        | sha256sum --check --strict \
     && tar -xzf /tmp/zk.tar.gz -C /usr/bin zk \
     && tar -xzf /tmp/lazygit.tar.gz -C /usr/bin lazygit \
     && chmod 0755 /usr/bin/zk /usr/bin/lazygit \
