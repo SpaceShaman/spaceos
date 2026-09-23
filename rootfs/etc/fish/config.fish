@@ -2,6 +2,10 @@ if status is-interactive
   set fish_greeting
   set --universal pure_enable_single_line_prompt true
   fzf_configure_bindings --variables=\e\cv --directory=\cf
+  if not set -q SSH_AUTH_SOCK; or not test -S "$SSH_AUTH_SOCK"
+      eval (ssh-agent -c | string collect) >/dev/null 2>&1
+  end
+  ssh-add -l >/dev/null 2>&1; or ssh-add -q ~/.ssh/id_ed25519 >/dev/null 2>&1
   export EDITOR=nvim
   export ZK_NOTEBOOK_DIR="$HOME/notes"
   alias g=sgpt
