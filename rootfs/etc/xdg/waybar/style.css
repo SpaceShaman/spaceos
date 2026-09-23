@@ -57,3 +57,7 @@ window#waybar {
 #clock {
     padding-right: 10px;
 }
+
+#color-accent {
+    color: @theme_accent;
+}
