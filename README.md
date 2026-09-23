@@ -213,7 +213,7 @@ dependencies inherited from the Fedora base image.
 | [Rofi](https://github.com/davatorium/rofi) | Application launcher. |
 | [Alacritty](https://github.com/alacritty/alacritty) | GPU-accelerated terminal emulator. |
 | [greetd](https://git.sr.ht/~kennylevinsen/greetd) + [tuigreet](https://github.com/apognu/tuigreet) | Lightweight login manager used to start the Sway session. |
-| [Ayu Dark / Ayu Light](https://github.com/dnordstrom/ayu-theme) | Matching GTK, terminal, Waybar, and Rofi themes. |
+| [Ayu Dark / Ayu Light](https://github.com/ayu-theme/ayu-colors) | Matching GTK, terminal, Waybar, and Rofi themes. |
 | [Plymouth](https://www.freedesktop.org/wiki/Software/Plymouth/) | Graphical boot screen, including the LUKS unlock prompt. |
 
 ### Applications
@@ -221,7 +221,7 @@ dependencies inherited from the Fedora base image.
 | Software | Description |
 |---|---|
 | [Firefox](https://www.firefox.com/) | Web browser. |
-| [Thunderbird](https://github.com/mozilla/releases-comm-central) | Email and calendar client. |
+| [Thunderbird](https://github.com/thunderbird/thunderbird-desktop) | Email and calendar client. |
 | [Signal Desktop](https://github.com/signalapp/Signal-Desktop) | Signal messenger distributed as an AppImage. |
 | [Teams for Linux](https://github.com/IsmaelMartinez/teams-for-linux) | Unofficial Microsoft Teams client. |
 | [ChatGPT](https://chatgpt.com/download) | ChatGPT desktop application for Linux. |
@@ -256,13 +256,11 @@ dependencies inherited from the Fedora base image.
 | Software | Description |
 |---|---|
 | [Podman](https://github.com/containers/podman) | Daemonless OCI container runtime and image builder. |
-| [Docker Engine](https://github.com/moby/moby) and [CLI](https://github.com/docker/cli) | Container environment compatible with the Docker ecosystem. |
-| [Docker Buildx](https://github.com/docker/buildx) | Extended container image build tooling. |
+| [Docker](https://github.com/docker/docker-ce) | Container environment compatible with the Docker ecosystem. |
 | [Docker Compose](https://github.com/docker/compose) | Definition and orchestration of multi-container environments. |
 | [Wiremix](https://github.com/tsowell/wiremix) | Terminal mixer for PipeWire. |
 | [brightnessctl](https://github.com/Hummer12007/brightnessctl) | Display brightness control. |
 | [grim](https://github.com/emersion/grim) + [slurp](https://github.com/emersion/slurp) + [swappy](https://github.com/jtheoof/swappy) | Wayland screenshot capture, region selection, and annotation. |
-| [SpaceOS Update](https://github.com/SpaceShaman/spaceos) | Custom automatic scheduling and status integration around native bootc updates. |
 | [DisplayLink](https://www.synaptics.com/products/displaylink-graphics) / [EVDI](https://github.com/DisplayLink/evdi) | Support for DisplayLink adapters and docking stations. |
 
 ## Keyboard shortcuts
