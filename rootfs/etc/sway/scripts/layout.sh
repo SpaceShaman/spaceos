@@ -13,14 +13,19 @@ EOF
          .nodes[]? | .. | objects |
          select(.app_id != null or .window != null)] | length')
 
-    case "$((height > width)):$((windows > 1))" in
-        1:0|0:1)
-            direction=vertical
-            ;;
-        *)
-            direction=horizontal
-            ;;
-    esac
+    if [ "$height" -gt "$width" ]; then
+        base=vertical
+        other=horizontal
+    else
+        base=horizontal
+        other=vertical
+    fi
+
+    if [ "$windows" -le 1 ] || [ "$((windows % 2))" -eq 1 ]; then
+        direction=$base
+    else
+        direction=$other
+    fi
 
     swaymsg -q split "$direction"
 }
