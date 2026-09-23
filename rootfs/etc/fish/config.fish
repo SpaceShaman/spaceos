@@ -6,6 +6,7 @@ if status is-interactive
       eval (ssh-agent -c | string collect) >/dev/null 2>&1
   end
   ssh-add -l >/dev/null 2>&1; or ssh-add -q ~/.ssh/id_ed25519 >/dev/null 2>&1
+  export PATH="$HOME/.local/bin:$PATH"
   export EDITOR=nvim
   export ZK_NOTEBOOK_DIR="$HOME/notes"
   alias c=oco
