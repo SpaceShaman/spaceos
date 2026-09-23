@@ -225,9 +225,11 @@ dependencies inherited from the Fedora base image.
 | Signal Desktop | Signal messenger distributed as an AppImage. |
 | Teams for Linux | Unofficial Microsoft Teams client. |
 | ChatGPT | ChatGPT desktop application for Linux. |
+| Bruno | API client for designing and testing HTTP requests. |
 | qBittorrent | BitTorrent client. |
 | VLC | Multimedia player. |
 | GIMP | Raster graphics editor. |
+| FileZilla | FTP, FTPS, and SFTP client. |
 
 ### Terminal and development
 
@@ -241,6 +243,9 @@ dependencies inherited from the Fedora base image.
 | lazygit | Terminal user interface for Git. |
 | Go | Go compiler and development toolchain. |
 | uv | Fast Python project and package manager. |
+| rclone | Command-line sync tool for cloud storage and remote filesystems. |
+| rsync | Efficient local and remote file synchronization utility. |
+| zk | Plain-text note-taking assistant with a Zettelkasten workflow. |
 | jq | Command-line JSON processor. |
 | Codex | OpenAI coding agent for the terminal. |
 | GitHub Copilot CLI | GitHub coding assistant for the terminal. |
@@ -282,6 +287,8 @@ dependencies inherited from the Fedora base image.
 |---|---|
 | `Mod + A` / `Mod + F` | Focus the previous/next window. |
 | `Mod + Shift + A` / `Mod + Shift + F` | Swap the focused window with the previous/next one. |
+| `Mod + Ctrl + J` / `Mod + Ctrl + ;` | Shrink/grow the focused window's width by 50 px. |
+| `Mod + Ctrl + K` / `Mod + Ctrl + L` | Shrink/grow the focused window's height by 50 px. |
 | `Mod + S` / `Mod + D` | Focus the previous/next workspace. |
 | `Mod + Shift + S` / `Mod + Shift + D` | Move the focused window to the previous/next workspace. |
 | `Mod + J` / `Mod + ;` | Focus the output to the left/right. |
@@ -298,3 +305,9 @@ dependencies inherited from the Fedora base image.
 | `XF86AudioRaiseVolume` / `XF86AudioLowerVolume` | Increase/decrease audio volume. |
 | `XF86AudioMute` | Toggle audio mute. |
 | `XF86MonBrightnessUp` / `XF86MonBrightnessDown` | Increase/decrease display brightness. |
+
+## Dynamic window and workspace management
+
+Workspaces are independent on each output and numbered consecutively from `1`. Moving backward from the first workspace inserts a new first workspace and shifts the existing ones; empty workspaces are removed by Sway, then the remaining workspaces are renumbered immediately. Forward and backward navigation creates a workspace only when the current workspace contains a window, and moving a window never leaves an unnecessary empty workspace behind.
+
+Window focus and swapping cycle through the windows on the focused workspace. A background Sway listener adjusts the next tiling split after each window opens or closes: it uses the longer screen axis for one or an odd number of windows, and the other axis for an even number, so the layout alternates automatically with the window count.
