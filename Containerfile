@@ -112,6 +112,7 @@ RUN set -eux \
         rclone \
         rsync \
         nc \
+        translate-shell \
     && : "Container tools" \
     && dnf5 install -y \
         podman \

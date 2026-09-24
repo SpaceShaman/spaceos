@@ -251,6 +251,7 @@ dependencies inherited from the Fedora base image.
 | [Codex](https://github.com/openai/codex) | OpenAI coding agent for the terminal. |
 | [GitHub Copilot CLI](https://github.com/github/copilot-cli) | GitHub coding assistant for the terminal. |
 | [opencommit](https://github.com/di-sukharev/opencommit) | Generates commit messages from staged changes. |
+| [Translate Shell](https://github.com/soimort/translate-shell) | Command-line translator using various translation engines. |
 
 ### Containers and system tools
 
