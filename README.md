@@ -258,10 +258,12 @@ dependencies inherited from the Fedora base image.
 | [Podman](https://github.com/containers/podman) | Daemonless OCI container runtime and image builder. |
 | [Docker](https://github.com/docker/docker-ce) | Container environment compatible with the Docker ecosystem. |
 | [Docker Compose](https://github.com/docker/compose) | Definition and orchestration of multi-container environments. |
+| [Docker Buildx](https://github.com/docker/buildx) | Extended Docker image builder with multi-platform build support. |
 | [Wiremix](https://github.com/tsowell/wiremix) | Terminal mixer for PipeWire. |
 | [brightnessctl](https://github.com/Hummer12007/brightnessctl) | Display brightness control. |
 | [grim](https://github.com/emersion/grim) + [slurp](https://github.com/emersion/slurp) + [swappy](https://github.com/jtheoof/swappy) | Wayland screenshot capture, region selection, and annotation. |
 | [DisplayLink](https://www.synaptics.com/products/displaylink-graphics) / [EVDI](https://github.com/DisplayLink/evdi) | Support for DisplayLink adapters and docking stations. |
+| [Netcat](https://nmap.org/ncat/) (`nc`) | Command-line utility for TCP and UDP connections. |
 
 ## Keyboard shortcuts
 
@@ -277,6 +279,7 @@ dependencies inherited from the Fedora base image.
 | `Mod + G` | Open ChatGPT. |
 | `Mod + T` | Toggle the light/dark theme. |
 | `Mod + Q` | Close the focused window. |
+| `Mod + Shift + Q` | Power off the system. |
 | `Mod + Shift + R` | Reload the Sway configuration. |
 
 ### Windows and workspaces
