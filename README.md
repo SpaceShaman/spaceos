@@ -280,6 +280,7 @@ dependencies inherited from the Fedora base image.
 | `Mod + B` | Open Firefox. |
 | `Mod + G` | Open ChatGPT. |
 | `Mod + T` | Toggle the light/dark theme. |
+| `Mod + Escape` | Show or hide Waybar. |
 | `Mod + Q` | Close the focused window. |
 | `Mod + Shift + Q` | Power off the system. |
 | `Mod + Shift + R` | Reload the Sway configuration. |
