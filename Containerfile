@@ -84,6 +84,7 @@ RUN set -eux \
         greetd-selinux \
         tuigreet \
         sway \
+        swayidle \
         waybar \
         plymouth \
         plymouth-plugin-two-step \

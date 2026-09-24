@@ -209,6 +209,7 @@ dependencies inherited from the Fedora base image.
 | Software | Description |
 |---|---|
 | [Sway](https://github.com/swaywm/sway) | Tiling Wayland compositor compatible with the i3 configuration model. |
+| [swayidle](https://github.com/swaywm/swayidle) | Turns displays off after 5 minutes of inactivity and restores them on input. |
 | [Waybar](https://github.com/Alexays/Waybar) | Status bar showing workspaces, network, audio, battery, and update state. |
 | [Rofi](https://github.com/davatorium/rofi) | Application launcher. |
 | [Alacritty](https://github.com/alacritty/alacritty) | GPU-accelerated terminal emulator. |
