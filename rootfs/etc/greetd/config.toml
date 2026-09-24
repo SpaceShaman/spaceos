@@ -1,6 +1,10 @@
 [terminal]
 vt = 1
 
+[initial_session]
+command = "/usr/bin/sway --unsupported-gpu"
+user = "shaman"
+
 [default_session]
 command = "/usr/bin/spaceos-tuigreet --time --remember --cmd '/usr/bin/sway --unsupported-gpu'"
 user = "greetd"
