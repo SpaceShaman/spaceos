@@ -18,7 +18,7 @@
     "disable-scroll": true,
     "all-outputs": false,
     "format": "{name}",
-    "on-update": "/etc/spaceos/rootfs/etc/sway/config.d/workspace.sh normalize"
+    "on-update": "/etc/sway/scripts/workspace.sh normalize"
   },
   "sway/window": {
     "format": "{title}",
