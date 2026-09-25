@@ -251,6 +251,9 @@ dependencies inherited from the Fedora base image.
 | [rsync](https://github.com/RsyncProject/rsync) | Efficient local and remote file synchronization utility. |
 | [zk](https://github.com/zk-org/zk) | Plain-text note-taking assistant with a Zettelkasten workflow. |
 | [jq](https://github.com/jqlang/jq) | Command-line JSON processor. |
+| [fzf](https://github.com/junegunn/fzf) | Fuzzy finder for filtering and selecting items in the terminal. |
+| [fd](https://github.com/sharkdp/fd) | Fast command-line tool for finding files and directories. |
+| [htop](https://github.com/htop-dev/htop) | Interactive process viewer and system monitor. |
 | [Codex](https://github.com/openai/codex) | OpenAI coding agent for the terminal. |
 | [GitHub Copilot CLI](https://github.com/github/copilot-cli) | GitHub coding assistant for the terminal. |
 | [opencommit](https://github.com/di-sukharev/opencommit) | Generates commit messages from staged changes. |
