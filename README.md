@@ -230,6 +230,7 @@ dependencies inherited from the Fedora base image.
 | [qBittorrent](https://github.com/qbittorrent/qBittorrent) | BitTorrent client. |
 | [VLC](https://github.com/videolan/vlc) | Multimedia player. |
 | [GIMP](https://github.com/GNOME/gimp) | Raster graphics editor. |
+| [imv](https://sr.ht/~exec64/imv/) | Wayland image viewer. |
 | [FileZilla](https://filezilla-project.org/) | FTP, FTPS, and SFTP client. |
 
 ### Terminal and development
@@ -242,6 +243,8 @@ dependencies inherited from the Fedora base image.
 | [Midnight Commander](https://github.com/MidnightCommander/mc) | Two-panel terminal file manager. |
 | [Git](https://github.com/git/git) | Version control system. |
 | [lazygit](https://github.com/jesseduffield/lazygit) | Terminal user interface for Git. |
+| [wlctl](https://github.com/aashish-thapa/wlctl) | Terminal interface for Wi-Fi and VPN connections managed by NetworkManager. |
+| [bluetui](https://github.com/pythops/bluetui) | Terminal interface for managing Bluetooth devices through BlueZ. |
 | [Go](https://github.com/golang/go) | Go compiler and development toolchain. |
 | [uv](https://github.com/astral-sh/uv) | Fast Python project and package manager. |
 | [rclone](https://github.com/rclone/rclone) | Command-line sync tool for cloud storage and remote filesystems. |
@@ -261,6 +264,7 @@ dependencies inherited from the Fedora base image.
 | [Docker](https://github.com/docker/docker-ce) | Container environment compatible with the Docker ecosystem. |
 | [Docker Compose](https://github.com/docker/compose) | Definition and orchestration of multi-container environments. |
 | [Docker Buildx](https://github.com/docker/buildx) | Extended Docker image builder with multi-platform build support. |
+| [BlueZ](https://www.bluez.org/) | Bluetooth stack and system service. |
 | [Wiremix](https://github.com/tsowell/wiremix) | Terminal mixer for PipeWire. |
 | [brightnessctl](https://github.com/Hummer12007/brightnessctl) | Display brightness control. |
 | [grim](https://github.com/emersion/grim) + [slurp](https://github.com/emersion/slurp) + [swappy](https://github.com/jtheoof/swappy) | Wayland screenshot capture, region selection, and annotation. |

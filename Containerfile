@@ -99,6 +99,7 @@ RUN set -eux \
         grim \
         slurp \
         swappy \
+        bluez \
     && : "Development and command-line tools" \
     && dnf5 install -y \
         jq \
@@ -141,30 +142,55 @@ RUN set -eux \
 # Standalone applications and tools
 # ============================================================
 
+# Signal - A private messaging application
 ADD --chmod=0755 \
     https://updates.signal.org/desktop/signal-desktop.AppImage /usr/bin/signal-desktop
-
 ADD --chmod=0644 \
     https://raw.githubusercontent.com/signalapp/Signal-Desktop/main/build/icons/png/512x512.png /usr/share/icons/hicolor/512x512/apps/signal-desktop.png
 
+# ZK - A command-line tool for managing Zettelkasten notes
 ADD https://github.com/zk-org/zk/releases/download/v0.15.6/zk-v0.15.6-linux-amd64.tar.gz /tmp/zk.tar.gz
-
-ADD https://github.com/jesseduffield/lazygit/releases/download/v0.65.1/lazygit_0.65.1_linux_x86_64.tar.gz /tmp/lazygit.tar.gz
-
 RUN set -eux \
     && printf '%s  %s\n' \
         50b2f0a8c533d607e5a8a1f478fe78d5585317178bd86456659c049965a8945d \
         /tmp/zk.tar.gz \
+    | sha256sum --check --strict \
+    && tar -xzf /tmp/zk.tar.gz -C /usr/bin zk \
+    && chmod 0755 /usr/bin/zk \
+    && zk --version \
+    && rm -f /tmp/zk.tar.gz
+
+# LazyGit - A simple terminal UI for git commands
+ADD https://github.com/jesseduffield/lazygit/releases/download/v0.65.1/lazygit_0.65.1_linux_x86_64.tar.gz /tmp/lazygit.tar.gz
+RUN set -eux \
+    && printf '%s  %s\n' \
         02beacbcda0fa342e50ae3480ba8147307353af3fb28e1d5f790e02329c201a6 \
         /tmp/lazygit.tar.gz \
     | sha256sum --check --strict \
-    && tar -xzf /tmp/zk.tar.gz -C /usr/bin zk \
     && tar -xzf /tmp/lazygit.tar.gz -C /usr/bin lazygit \
-    && chmod 0755 /usr/bin/zk /usr/bin/lazygit \
-    && zk --version \
+    && chmod 0755 /usr/bin/lazygit \
     && lazygit --version \
-    && rm -f /tmp/zk.tar.gz /tmp/lazygit.tar.gz
+    && rm -f /tmp/lazygit.tar.gz
 
+# wlctl - TUI for managing wifi/ethernet/vpn
+ADD https://github.com/aashish-thapa/wlctl/releases/download/v0.1.10/wlctl-x86_64-unknown-linux-musl /usr/bin/wlctl
+RUN set -eux \
+    && printf '%s  %s\n' \
+        d980e56367f40a507463c645e690e052ff7a1a72bd7b945efc1a8fbd7c7c9927 \
+        /usr/bin/wlctl \
+    | sha256sum --check --strict \
+    && chmod 0755 /usr/bin/wlctl \
+    && wlctl --version
+
+# bluetui - TUI for managing bluetooth devices
+ADD https://github.com/pythops/bluetui/releases/download/v0.8.1/bluetui-x86_64-linux-musl /usr/bin/bluetui
+RUN set -eux \
+    && printf '%s  %s\n' \
+        c6d133930af3ef85d5fb6492c98982958619284d1f583c2c8ecf46992460d60e \
+        /usr/bin/bluetui \
+    | sha256sum --check --strict \
+    && chmod 0755 /usr/bin/bluetui \
+    && bluetui --version
 
 # ============================================================
 # Global npm tools
@@ -270,6 +296,7 @@ RUN systemctl enable \
     docker.service \
     containerd.service \
     greetd.service \
+    bluetooth.service \
     && systemctl set-default graphical.target
 
 RUN bootc container lint
