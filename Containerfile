@@ -137,6 +137,7 @@ RUN set -eux \
         gimp \
         filezilla \
         imv \
+        gnome-disk-utility \
     && rm -f /tmp/bruno.rpm \
     && dnf5 clean all
 
