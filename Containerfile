@@ -132,6 +132,7 @@ RUN set -eux \
         vlc \
         gimp \
         filezilla \
+        imv \
     && rm -f /tmp/bruno.rpm \
     && dnf5 clean all
 

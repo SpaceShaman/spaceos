@@ -1,0 +1,10 @@
+# Shift the default HJKL panning layout one key to the right.
+# Other built-in bindings remain available.
+[binds]
+h =
+j = pan 50 0
+k = pan 0 -50
+l = pan 0 50
+<semicolon> = pan -50 0
+r = rotate by 90
+<Ctrl+r> = reset
