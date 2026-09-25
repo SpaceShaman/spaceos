@@ -114,6 +114,9 @@ RUN set -eux \
         rsync \
         nc \
         translate-shell \
+        fzf \
+        fd-find \
+        htop \
     && : "Container tools" \
     && dnf5 install -y \
         podman \
