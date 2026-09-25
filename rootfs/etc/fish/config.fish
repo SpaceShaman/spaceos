@@ -9,6 +9,7 @@ if status is-interactive
   export PATH="$HOME/.local/bin:$PATH"
   export EDITOR=nvim
   export ZK_NOTEBOOK_DIR="$HOME/notes"
+  alias o=open
   alias w=wlctl
   alias b=bluetui
   alias c=oco

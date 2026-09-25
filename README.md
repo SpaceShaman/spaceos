@@ -277,6 +277,7 @@ I love aliases. Life is too short to type the same long command over and over, a
 
 | Alias | Runs | What I use it for |
 |---|---|---|
+| `o` | `open` | Open files and URLs with the default application. |
 | `w`, `b` | `wlctl`, `bluetui` | Open the Wi-Fi/VPN and Bluetooth terminal interfaces. |
 | `c` | `oco` | Generate a commit message with opencommit. |
 | `wiremix`, `mix`, `m` | `wiremix --config /etc/wiremix/wiremix.toml` | Open the PipeWire mixer with my configuration. |
