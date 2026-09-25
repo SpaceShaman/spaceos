@@ -232,6 +232,7 @@ dependencies inherited from the Fedora base image.
 | [GIMP](https://github.com/GNOME/gimp) | Raster graphics editor. |
 | [imv](https://sr.ht/~exec64/imv/) | Wayland image viewer. |
 | [FileZilla](https://filezilla-project.org/) | FTP, FTPS, and SFTP client. |
+| [GNOME Disks](https://apps.gnome.org/DiskUtility/) | Utility for inspecting and managing storage devices and disk images. |
 
 ### Terminal and development
 
@@ -253,6 +254,7 @@ dependencies inherited from the Fedora base image.
 | [jq](https://github.com/jqlang/jq) | Command-line JSON processor. |
 | [fzf](https://github.com/junegunn/fzf) | Fuzzy finder for filtering and selecting items in the terminal. |
 | [fd](https://github.com/sharkdp/fd) | Fast command-line tool for finding files and directories. |
+| [bat](https://github.com/sharkdp/bat) | `cat` clone with syntax highlighting and Git integration. |
 | [htop](https://github.com/htop-dev/htop) | Interactive process viewer and system monitor. |
 | [Codex](https://github.com/openai/codex) | OpenAI coding agent for the terminal. |
 | [GitHub Copilot CLI](https://github.com/github/copilot-cli) | GitHub coding assistant for the terminal. |
