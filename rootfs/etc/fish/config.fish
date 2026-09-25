@@ -9,9 +9,12 @@ if status is-interactive
   export PATH="$HOME/.local/bin:$PATH"
   export EDITOR=nvim
   export ZK_NOTEBOOK_DIR="$HOME/notes"
+  alias w=wlctl
+  alias b=bluetui
   alias c=oco
   alias wiremix='wiremix --config /etc/wiremix/wiremix.toml'
   alias mix=wiremix
+  alias m=wiremix
   alias lazygit='lazygit --use-config-dir /etc/lazygit'
   alias l=lazygit
   alias v=nvim
@@ -30,18 +33,6 @@ if status is-interactive
   alias tp='trans -b :pl'
   alias box='rclone mount box: ~/box --vfs-cache-mode full --daemon'
   alias syncbox='rsync -av --size-only --delete --progress -e ssh box:Muzyka/ Muzyka/'
-
-  alias w=wifitui
-  alias b=bluetoothctl
-  # Connect to Headphones
-  alias bh='b power off && b power on && b connect F4:0E:11:78:E7:F3'
-  # Connect to Speaker
-  alias bs='b power off && b power on && b connect 08:F0:B6:F6:1C:C5'
-  # Connect to small speaker
-  alias bss='b power off && b power on && b connect 00:02:3C:65:84:E1'
-  alias bd='b disconnect'
-  # Restart Pipewire
-  alias pw='systemctl --user restart wireplumber pipewire pipewire-pulse'
 
   function g
     set -l common_args --ephemeral --skip-git-repo-check --sandbox read-only
