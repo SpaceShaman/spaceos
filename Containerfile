@@ -116,6 +116,7 @@ RUN set -eux \
         translate-shell \
         fzf \
         fd-find \
+        bat \
         htop \
     && : "Container tools" \
     && dnf5 install -y \
