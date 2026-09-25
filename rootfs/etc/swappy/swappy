@@ -1,0 +1,4 @@
+#!/bin/sh
+
+gtk_theme=$(gsettings get org.gnome.desktop.interface gtk-theme | tr -d "'")
+exec env XDG_CONFIG_HOME=/etc GTK_THEME="$gtk_theme" /usr/bin/swappy "$@"
