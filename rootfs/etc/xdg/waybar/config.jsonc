@@ -9,6 +9,7 @@
     "custom/spaceos-update",
     "tray",
     "network",
+    "bluetooth",
     "pulseaudio",
     "backlight",
     "battery",
@@ -29,22 +30,34 @@
     "icon-size": 16,
     "spacing": 6
   },
+  "bluetooth": {
+    "format-on": "",
+    "format-off": "󰂲",
+    "format-connected": " {device_alias}",
+    "tooltip-format-connected": "{device_alias} · 󰁹 {device_battery_percentage}%",
+    "tooltip-format-enumerate-connected": "{device_alias} · 󰁹 {device_battery_percentage}%",
+    "on-click": "alacritty -e bluetui"
+  },
   "network": {
     "format-wifi": "󰖩 {essid}",
     "format-ethernet": "󰈀 Ethernet",
     "format-disconnected": "󰤭 Offline",
     "tooltip-format-wifi": "{essid} · {signalStrength}%",
-    "interval": 30
+    "interval": 30,
+    "on-click": "alacritty -e wlctl"
   },
   "pulseaudio": {
     "format": "{icon} {volume}%",
     "format-muted": "󰝟 Muted",
     "format-icons": ["󰕿", "󰖀", "󰕾"],
-    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+    "on-click": "alacritty -e wiremix",
+    "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+    "on-click-middle": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 50%",
   },
   "backlight": {
     "device": "intel_backlight",
-    "format": "󰃠 {percent}%"
+    "format": "󰃠 {percent}%",
+    "on-click": "brightnessctl -q -d intel_backlight set 50%",
   },
   "battery": {
     "bat": "BAT0",
@@ -73,9 +86,7 @@
         }
     },
     "actions": {
-        "on-click-right": "mode",
-        "on-click-forward": "tz_up",
-        "on-click-backward": "tz_down",
+        "on-click": "mode",
         "on-scroll-up": "shift_up",
         "on-scroll-down": "shift_down"
     }
