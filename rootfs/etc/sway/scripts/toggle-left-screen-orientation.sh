@@ -10,9 +10,9 @@ transform="$(
 
 case "$transform" in
   270)
-    swaymsg "output \"$output\" transform normal"
+    swaymsg "output \"$output\" pos -1120 0 transform normal mode 2560x1440@119.998Hz"
     ;;
   normal)
-    swaymsg "output \"$output\" transform 270"
+    swaymsg "output '$output' pos 0 0 transform 270 mode 2560x1440@119.998Hz"
     ;;
 esac
