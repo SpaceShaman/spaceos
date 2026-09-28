@@ -121,8 +121,9 @@
 @define-color theme_text_color @view_fg_color;
 @define-color theme_bg_color @window_bg_color;
 @define-color theme_base_color @view_bg_color;
-@define-color theme_selected_bg_color @accent_bg_color;
-@define-color theme_selected_fg_color @accent_fg_color;
+/* GTK3 clients such as GNOME Disks draw labels over this selection color. */
+@define-color theme_selected_bg_color mix(@ayu_blue, @ayu_bg, 0.36);
+@define-color theme_selected_fg_color @ayu_fg;
 @define-color theme_unfocused_fg_color @ayu_muted;
 @define-color theme_unfocused_text_color @ayu_muted;
 @define-color theme_unfocused_bg_color @window_bg_color;
