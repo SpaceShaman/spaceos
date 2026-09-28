@@ -28,12 +28,14 @@ if status is-interactive
   alias dev='docker compose -f docker-compose.dev.yml up -d'
   alias devd='docker compose -f docker-compose.dev.yml down'
   alias devr='docker compose -f docker-compose.dev.yml restart'
-  # alias cp='rsync -ah --info=progress2'
-  # alias mv='rsync -ah --info=progress2 --remove-source-files'
   alias t='trans -b :en'
   alias tp='trans -b :pl'
   alias box='rclone mount box: ~/box --vfs-cache-mode full --daemon'
   alias syncbox='rsync -av --size-only --delete --progress -e ssh box:Muzyka/ Muzyka/'
+  alias newsboat='newsboat \
+    --config-file /etc/newsboat/config \
+    --url-file /etc/newsboat/urls'
+  alias n=newsboat
 
   function g
     set -l common_args --ephemeral --skip-git-repo-check --sandbox read-only

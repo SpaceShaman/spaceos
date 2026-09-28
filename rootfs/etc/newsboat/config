@@ -1,0 +1,37 @@
+# --- Navigation ---
+unbind-key h
+bind-key j quit
+bind-key k down
+bind-key l up
+bind-key ; open
+bind-key m toggle-article-read
+
+# --- Browser ---
+browser "firefox %u"
+
+# --- Refresh ---
+auto-reload yes
+reload-time 30
+refresh-on-startup yes
+
+# --- Sorting ---
+article-sort-order date-desc
+
+# --- Feed list ---
+show-read-feeds no
+feedlist-format "%t %u"
+
+# --- Dates ---
+datetime-format "%Y-%m-%d %H:%M"
+
+# --- Cleaner article list ---
+articlelist-format "%D  %f  %t"
+
+# --- Colors ---
+color background default default
+color article default default
+color listnormal default default
+color listnormal_unread cyan default bold
+color listfocus yellow default bold
+color listfocus_unread yellow default bold
+color info default default bold
