@@ -25,6 +25,8 @@ touch /etc/alacritty/alacritty.toml /etc/xdg/waybar/style.css
 gsettings set org.gnome.desktop.interface color-scheme "$color_scheme"
 gsettings set org.gnome.desktop.interface gtk-theme "$gtk_theme"
 
+GTK_THEME=$gtk_theme dbus-update-activation-environment --systemd GTK_THEME
+
 if [ -S "${SWAYSOCK:-}" ]; then
     swaymsg reload >/dev/null
 else
