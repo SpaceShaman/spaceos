@@ -293,11 +293,10 @@ I love aliases. Life is too short to type the same long command over and over, a
 | `p` | `python3` | Run Python. |
 | `d`, `du`, `dd`, `dr` | `docker compose`, `docker compose up -d`, `docker compose down`, `docker compose restart` | Manage Compose projects. |
 | `dev`, `devd`, `devr` | `docker compose -f docker-compose.dev.yml` with `up -d`, `down`, or `restart` | Manage the development Compose file. |
-| `cp` | `rsync -ah --info=progress2` | Copy files with progress. |
-| `mv` | `rsync -ah --info=progress2 --remove-source-files` | Transfer files with progress and remove the source files (empty directories remain). |
 | `t`, `tp` | `trans -b :en`, `trans -b :pl` | Translate text to English or Polish. |
 | `box` | `rclone mount box: ~/box --vfs-cache-mode full --daemon` | Mount my Box remote at `~/box`. |
 | `syncbox` | `rsync -av --size-only --delete --progress -e ssh box:Muzyka/ Muzyka/` | Sync music from `box` into the local `Muzyka/` directory. |
+| `newsboat`, `n` | `newsboat --config-file /etc/newsboat/config --url-file /etc/newsboat/urls` | Open Newsboat with the system feed list and configuration. |
 | `g` | `codex exec --ephemeral --skip-git-repo-check --sandbox read-only` | Run a prompt with Codex in a read-only sandbox; pass the prompt as arguments or through standard input. Defined as a Fish function. |
 
 ## Keyboard shortcuts
