@@ -1,5 +1,7 @@
 include /etc/sway/config.d/10-systemd-session.conf
 
+exec --no-startup-id /etc/sway/scripts/init-gtk-theme.sh
+
 input type:keyboard {
     xkb_layout pl
 }
