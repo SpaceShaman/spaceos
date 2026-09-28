@@ -14,9 +14,6 @@ auto-reload yes
 reload-time 30
 refresh-on-startup yes
 
-# --- Sorting ---
-article-sort-order date-desc
-
 # --- Feed list ---
 show-read-feeds no
 feedlist-format "%t %u"
