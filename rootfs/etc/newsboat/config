@@ -7,7 +7,7 @@ bind-key ; open
 bind-key m toggle-article-read
 
 # --- Browser ---
-browser "firefox %u"
+browser "firefox %u &"
 
 # --- Refresh ---
 auto-reload yes
