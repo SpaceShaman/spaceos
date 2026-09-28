@@ -118,6 +118,7 @@ RUN set -eux \
         fd-find \
         bat \
         htop \
+        newsboat \
     && : "Container tools" \
     && dnf5 install -y \
         podman \
