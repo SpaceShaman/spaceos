@@ -1,0 +1,13 @@
+{
+  "label": "Ayu",
+  "light": {
+    "fg": "#5C6773",
+    "bg": "#FFFFFF",
+    "link": "#399EE6"
+  },
+  "dark": {
+    "fg": "#B3B1AD",
+    "bg": "#000000",
+    "link": "#59C2FF"
+  }
+}

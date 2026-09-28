@@ -223,6 +223,8 @@ COPY kargs.d/ /usr/lib/bootc/kargs.d/
 COPY . /etc/spaceos/
 RUN cp -asf --remove-destination /etc/spaceos/rootfs/. /
 
+RUN glib-compile-schemas /usr/share/glib-2.0/schemas
+
 
 # ============================================================
 # Branding and fonts
