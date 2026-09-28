@@ -5,6 +5,7 @@ bind-key k down
 bind-key l up
 bind-key ; open
 bind-key m toggle-article-read
+bind-key r toggle-show-read-feeds
 
 # --- Browser ---
 browser "firefox %u &"
@@ -16,6 +17,7 @@ refresh-on-startup yes
 
 # --- Feed list ---
 show-read-feeds no
+show-read-articles no
 feedlist-format "%t %u"
 prepopulate-query-feeds yes
 
