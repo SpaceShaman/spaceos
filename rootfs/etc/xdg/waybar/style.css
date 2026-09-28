@@ -50,7 +50,7 @@ window#waybar {
     padding: 0 2px;
 }
 
-#custom-spaceos-update.ready {
+#custom-spaceos-update {
     color: @theme_accent;
 }
 

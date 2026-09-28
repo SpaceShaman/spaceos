@@ -67,9 +67,7 @@
   },
   "custom/spaceos-update": {
     "exec": "/usr/libexec/spaceos-update-waybar",
-    "return-type": "json",
-    "interval": 60,
-    "tooltip": true
+    "interval": 60
   },
   "clock": {
     "timezone": "Europe/Warsaw",
