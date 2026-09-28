@@ -139,6 +139,7 @@ RUN set -eux \
         filezilla \
         imv \
         gnome-disk-utility \
+        foliate \
     && rm -f /tmp/bruno.rpm \
     && dnf5 clean all
 
