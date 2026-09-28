@@ -35,7 +35,7 @@ flock -n 9 || exit 0
 
 apply_layout
 swaymsg -m -t subscribe '["window"]' |
-    jq -c --unbuffered 'select(.change == "new" or .change == "close")' |
+  jq -c --unbuffered 'select(.change == "new" or .change == "close" or .change == "move")' |
 while IFS= read -r _; do
     sleep 0.05
     apply_layout
