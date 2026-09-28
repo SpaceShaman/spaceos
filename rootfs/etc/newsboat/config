@@ -17,6 +17,7 @@ refresh-on-startup yes
 # --- Feed list ---
 show-read-feeds no
 feedlist-format "%t %u"
+prepopulate-query-feeds yes
 
 # --- Dates ---
 datetime-format "%Y-%m-%d %H:%M"
