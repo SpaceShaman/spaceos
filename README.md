@@ -233,6 +233,7 @@ dependencies inherited from the Fedora base image.
 | [imv](https://sr.ht/~exec64/imv/) | Wayland image viewer. |
 | [FileZilla](https://filezilla-project.org/) | FTP, FTPS, and SFTP client. |
 | [GNOME Disks](https://apps.gnome.org/DiskUtility/) | Utility for inspecting and managing storage devices and disk images. |
+| [Foliate](https://github.com/johnfactotum/foliate) | eBook reader supporting EPUB, MOBI, AZW3, and PDF formats. |
 
 ### Terminal and development
 
