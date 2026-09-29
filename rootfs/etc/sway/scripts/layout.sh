@@ -1,7 +1,15 @@
 #!/bin/sh
 apply_layout() {
-    info=$(swaymsg -t get_outputs -r | jq -r \
-        '.[] | select(.focused) | [.current_workspace, .rect.width, .rect.height] | @tsv')
+    id=${1:-}
+    if [ -n "$id" ]; then
+        info=$(swaymsg -t get_tree -r | jq -r --argjson id "$id" '
+            .. | objects | select(.type == "workspace") |
+            select([.nodes[]? | .. | objects | .id] | index($id)) |
+            [.name, .rect.width, .rect.height] | @tsv')
+    else
+        info=$(swaymsg -t get_outputs -r | jq -r \
+            '.[] | select(.focused) | [.current_workspace, .rect.width, .rect.height] | @tsv')
+    fi
     [ -n "$info" ] || return
     IFS="$(printf '\t')" read -r workspace width height <<EOF
 $info
@@ -27,16 +35,30 @@ EOF
         direction=$other
     fi
 
-    swaymsg -q split "$direction"
+    if [ -n "$id" ]; then
+        swaymsg -q -- "[con_id=$id] split $direction"
+    else
+        swaymsg -q split "$direction"
+    fi
 }
 
 exec 9>"${XDG_RUNTIME_DIR:-/tmp}/spaceos-layout.lock"
 flock -n 9 || exit 0
 
 apply_layout
-swaymsg -m -t subscribe '["window"]' |
-  jq -c --unbuffered 'select(.change == "new" or .change == "close" or .change == "move")' |
-while IFS= read -r _; do
+swaymsg -m -t subscribe '["window", "workspace"]' |
+  jq -r --unbuffered '
+      if .container? then
+          select(.change == "new" or .change == "close" or .change == "move") |
+          [.change, .container.id] | @tsv
+      else
+          select(.change == "focus") | "focus"
+      end' |
+while IFS="$(printf '\t')" read -r change id; do
     sleep 0.05
-    apply_layout
+    if [ "$change" = new ] || [ "$change" = move ]; then
+        apply_layout "$id"
+    else
+        apply_layout
+    fi
 done
