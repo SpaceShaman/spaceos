@@ -129,6 +129,7 @@ RUN set -eux \
         docker-compose-plugin \
     && : "Desktop applications" \
     && dnf5 install -y \
+        java-25-openjdk \
         firefox \
         "${CHATGPT_RPM_URL}" \
         /tmp/bruno.rpm \
@@ -206,12 +207,10 @@ RUN set -eux \
         efe799aaa3627db683b43f00c9c210aea0b75c00cc8f0a0f0434d12bb3ddde5a \
         /tmp/zap.tar.gz \
     | sha256sum --check --strict \
+    && mkdir -p /usr/lib/zaproxy \
     && tar -xzf /tmp/zap.tar.gz \
         --strip-components=1 \
         -C /usr/lib/zaproxy \
-    && ln -s /usr/lib/zaproxy/zap.sh /usr/bin/zap \
-    && chmod 0755 /usr/bin/zap \
-    && zap --version \
     && rm -f /tmp/zap.tar.gz
 
 
