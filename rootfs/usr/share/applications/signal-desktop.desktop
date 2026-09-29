@@ -2,7 +2,6 @@
 Name=Signal
 Comment=Private messaging from your desktop
 Exec=signal-desktop %U
-Icon=signal-desktop
 Terminal=false
 Type=Application
 StartupWMClass=signal

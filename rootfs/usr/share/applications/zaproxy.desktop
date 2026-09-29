@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=ZAP
+Comment=Web application security testing
+Exec=/usr/bin/zap
+Icon=/usr/lib/zaproxy/zap.ico
+Terminal=false
+Type=Application
+Categories=System;Security;
+Keywords=ZAP;Proxy;Web;Security;

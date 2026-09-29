@@ -154,8 +154,6 @@ RUN set -eux \
 # Signal - A private messaging application
 ADD --chmod=0755 \
     https://updates.signal.org/desktop/signal-desktop.AppImage /usr/bin/signal-desktop
-ADD --chmod=0644 \
-    https://raw.githubusercontent.com/signalapp/Signal-Desktop/main/build/icons/png/512x512.png /usr/share/icons/hicolor/512x512/apps/signal-desktop.png
 
 # ZK - A command-line tool for managing Zettelkasten notes
 ADD https://github.com/zk-org/zk/releases/download/v0.15.6/zk-v0.15.6-linux-amd64.tar.gz /tmp/zk.tar.gz
