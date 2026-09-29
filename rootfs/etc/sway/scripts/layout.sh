@@ -1,31 +1,18 @@
 #!/usr/bin/bash
 set -euo pipefail
 
-# One instance per Sway session. The subscription does not inherit this lock.
+# One instance per Sway session. Helpers do not inherit this lock.
 exec 9>"${XDG_RUNTIME_DIR:-/tmp}/spaceos-layout-$UID-${SWAYSOCK##*/}.lock"
 flock -n 9 || exit 0
 
-snapshot() {
-    swaymsg -t get_tree -r | jq -c '
+# Keep both the parser and its previous snapshot alive between events.
+coproc PLANNER { exec jq -nr --unbuffered --arg mark "_spaceos_layout_$$" '
+    def snapshot:
         [.. | objects | select(.type == "workspace" and .name != "__i3_scratch") |
          {id, portrait: (.rect.height > .rect.width), windows:
           [.nodes[]? | .. | objects |
-           select(.app_id != null or .window != null or .pid != null) | {id, focused}]}]'
-}
-
-previous=$(snapshot)
-exec {events}< <(exec swaymsg -m -r -t subscribe '["window"]' 9>&-)
-subscriber=$!
-trap 'kill "$subscriber" 2>/dev/null || :; wait "$subscriber" 2>/dev/null || :' EXIT
-trap 'exit 0' TERM INT
-
-while IFS= read -r event <&"$events"; do
-    jq -e '.success == true or
-           (.change == "new" or .change == "move" or
-            .change == "close" or .change == "floating")' <<<"$event" >/dev/null || continue
-
-    current=$(snapshot)
-    commands=$(jq -r --argjson previous "$previous" --arg mark "_spaceos_layout_$$" '
+           select(.app_id != null or .window != null or .pid != null) | {id, focused}]}];
+    def arrange($previous):
         ($previous | map(. as $ws | .windows[] |
             {key: (.id | tostring), value: $ws.id}) | from_entries) as $known |
         [.[] | . as $ws |
@@ -47,12 +34,35 @@ while IFS= read -r event <&"$events"; do
                  else . end
              else . end |
              .last = $window.id | .count += 1
-         ) | .commands[]] | join("; ")' <<<"$current")
+         ) | .commands[]] | join("; ");
 
-    # Membership, not move events, distinguishes arrivals from our own commands.
-    # Keep this snapshot so windows arriving during the commands are handled next.
-    previous=$current
+    foreach inputs as $tree ({previous: null};
+        ($tree | snapshot) as $current |
+        .commands = (if .previous == null then ""
+                     else .previous as $old | $current | arrange($old) end) |
+        .previous = $current;
+        .commands)
+' 9>&-; }
+planner=$PLANNER_PID
+exec {planner_in}>&"${PLANNER[1]}" {planner_out}<&"${PLANNER[0]}"
+subscriber=
+trap 'kill "$planner" ${subscriber:+"$subscriber"} 2>/dev/null || :; wait "$planner" ${subscriber:+"$subscriber"} 2>/dev/null || :' EXIT
+trap 'exit 0' TERM INT
+
+update() {
+    swaymsg -t get_tree -r >&"$planner_in"
+    IFS= read -r commands <&"$planner_out"
     if [[ -n "$commands" ]]; then
         swaymsg -q -- "$commands" || printf 'layout: failed to place an arriving window\n' >&2
     fi
+}
+
+update
+exec {events}< <(exec swaymsg -m -r -t subscribe '["window"]' 9>&-)
+subscriber=$!
+# Filtering notifications in Bash avoids starting jq for focus, title and mark events.
+relevant='"change"[[:space:]]*:[[:space:]]*"(new|move|close|floating)"|"success"[[:space:]]*:[[:space:]]*true'
+while IFS= read -r event <&"$events"; do
+    [[ $event =~ $relevant ]] || continue
+    update
 done
