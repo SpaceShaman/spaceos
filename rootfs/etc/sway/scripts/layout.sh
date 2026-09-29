@@ -1,47 +1,58 @@
-#!/bin/sh
-apply_layout() {
-    workspace=$(swaymsg -t get_workspaces -r | jq -r '
-        .[] | select(.focused) |
-        [.name, (.rect.height > .rect.width)] | @tsv')
-    [ -n "$workspace" ] || return
+#!/usr/bin/bash
+set -euo pipefail
 
-    IFS="$(printf '\t')" read -r name portrait <<EOF
-$workspace
-EOF
-
-    layout=$(swaymsg -t get_tree -r | jq -r --arg name "$name" --argjson portrait "$portrait" '
-        .. | objects | select(.type == "workspace" and .name == $name) |
-        ([.nodes[]? | .. | objects | select(.app_id != null or .window != null)] | length) as $count |
-        (first(paths(.focused == true) | select(.[0] == "nodes")) // null) as $path |
-        ([.floating_nodes[]? | .. | objects | select(.focused == true)] | length > 0) as $floating_focus |
-        if $path == null and ($count > 0 or $floating_focus) then empty else
-            ($count > 1 and ($count % 2) == 0) as $even |
-            (if $portrait != $even then "vertical" else "horizontal" end) as $direction |
-            (if $path == null then . else getpath($path[0:-2]) end) as $parent |
-            select($parent.layout != (if $direction == "vertical" then "splitv" else "splith" end)) |
-            [$direction, (if $path == null then "" else getpath($path).id end)] | @tsv
-        end')
-    [ -n "$layout" ] || return
-
-    IFS="$(printf '\t')" read -r direction id <<EOF
-$layout
-EOF
-    if [ -n "$id" ]; then
-        swaymsg -q -- "[con_id=$id] split $direction"
-    else
-        swaymsg -q split "$direction"
-    fi
-}
-
-exec 9>"${XDG_RUNTIME_DIR:-/tmp}/spaceos-layout.lock"
+# One instance per Sway session. The subscription does not inherit this lock.
+exec 9>"${XDG_RUNTIME_DIR:-/tmp}/spaceos-layout-$UID-${SWAYSOCK##*/}.lock"
 flock -n 9 || exit 0
 
-apply_layout
-swaymsg -m -t subscribe '["window", "workspace", "output"]' |
-    jq -r --unbuffered '
-        select(.change == "new" or .change == "close" or .change == "move" or
-               .change == "focus" or .change == "floating" or
-               .change == "unspecified") | .change' |
-    while IFS= read -r _; do
-        apply_layout
-    done
+snapshot() {
+    swaymsg -t get_tree -r | jq -c '
+        [.. | objects | select(.type == "workspace" and .name != "__i3_scratch") |
+         {id, portrait: (.rect.height > .rect.width), windows:
+          [.nodes[]? | .. | objects |
+           select(.app_id != null or .window != null or .pid != null) | {id, focused}]}]'
+}
+
+previous=$(snapshot)
+exec {events}< <(exec swaymsg -m -r -t subscribe '["window"]' 9>&-)
+subscriber=$!
+trap 'kill "$subscriber" 2>/dev/null || :; wait "$subscriber" 2>/dev/null || :' EXIT
+trap 'exit 0' TERM INT
+
+while IFS= read -r event <&"$events"; do
+    jq -e '.success == true or
+           (.change == "new" or .change == "move" or
+            .change == "close" or .change == "floating")' <<<"$event" >/dev/null || continue
+
+    current=$(snapshot)
+    commands=$(jq -r --argjson previous "$previous" --arg mark "_spaceos_layout_$$" '
+        ($previous | map(. as $ws | .windows[] |
+            {key: (.id | tostring), value: $ws.id}) | from_entries) as $known |
+        [.[] | . as $ws |
+         (.windows | map(select($known[.id | tostring] == $ws.id))) as $old |
+         (.windows | map(select($known[.id | tostring] != $ws.id)) | sort_by(.id)) as $new |
+         reduce $new[] as $window (
+             {last: $old[-1].id, count: ($old | length), commands: []};
+             if .last != null then
+                 (if $ws.portrait == (.count % 2 == 1)
+                  then "vertical" else "horizontal" end) as $direction |
+                 ($mark + "_" + ($window.id | tostring)) as $target |
+                 .commands += [
+                     "[con_id=\(.last)] split \($direction)",
+                     "[con_id=\(.last)] mark --add \($target)",
+                     "[con_id=\($window.id)] move container to mark \($target)",
+                     "[con_id=\(.last)] unmark \($target)"] |
+                 if $window.focused then
+                     .commands += ["[con_id=\($window.id)] focus"]
+                 else . end
+             else . end |
+             .last = $window.id | .count += 1
+         ) | .commands[]] | join("; ")' <<<"$current")
+
+    # Membership, not move events, distinguishes arrivals from our own commands.
+    # Keep this snapshot so windows arriving during the commands are handled next.
+    previous=$current
+    if [[ -n "$commands" ]]; then
+        swaymsg -q -- "$commands" || printf 'layout: failed to place an arriving window\n' >&2
+    fi
+done

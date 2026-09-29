@@ -12,7 +12,7 @@ mouse_warping container
 floating_modifier $mod normal
 tiling_drag enable
 
-exec_always --no-startup-id /etc/sway/scripts/layout.sh
+exec --no-startup-id /etc/sway/scripts/layout.sh
 
 include config.d/theme/current.conf
 include config.d/outputs.conf

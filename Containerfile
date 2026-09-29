@@ -201,6 +201,22 @@ RUN set -eux \
     && chmod 0755 /usr/bin/bluetui \
     && bluetui --version
 
+# ZAP - A security tool for finding vulnerabilities in web applications
+ADD https://github.com/zaproxy/zaproxy/releases/download/v2.17.0/ZAP_2.17.0_Linux.tar.gz /tmp/zap.tar.gz
+RUN set -eux \
+    && printf '%s  %s\n' \
+        efe799aaa3627db683b43f00c9c210aea0b75c00cc8f0a0f0434d12bb3ddde5a \
+        /tmp/zap.tar.gz \
+    | sha256sum --check --strict \
+    && tar -xzf /tmp/zap.tar.gz \
+        --strip-components=1 \
+        -C /usr/lib/zaproxy \
+    && ln -s /usr/lib/zaproxy/zap.sh /usr/bin/zap \
+    && chmod 0755 /usr/bin/zap \
+    && zap --version \
+    && rm -f /tmp/zap.tar.gz
+
+
 # ============================================================
 # Global npm tools
 # ============================================================
