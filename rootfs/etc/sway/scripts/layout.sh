@@ -1,40 +1,31 @@
 #!/bin/sh
 apply_layout() {
-    id=${1:-}
-    if [ -n "$id" ]; then
-        info=$(swaymsg -t get_tree -r | jq -r --argjson id "$id" '
-            .. | objects | select(.type == "workspace") |
-            select([.nodes[]? | .. | objects | .id] | index($id)) |
-            [.name, .rect.width, .rect.height] | @tsv')
-    else
-        info=$(swaymsg -t get_outputs -r | jq -r \
-            '.[] | select(.focused) | [.current_workspace, .rect.width, .rect.height] | @tsv')
-    fi
-    [ -n "$info" ] || return
-    IFS="$(printf '\t')" read -r workspace width height <<EOF
-$info
+    workspace=$(swaymsg -t get_workspaces -r | jq -r '
+        .[] | select(.focused) |
+        [.name, (.rect.height > .rect.width)] | @tsv')
+    [ -n "$workspace" ] || return
+
+    IFS="$(printf '\t')" read -r name portrait <<EOF
+$workspace
 EOF
 
-    windows=$(swaymsg -t get_tree -r | jq -r --arg workspace "$workspace" '
-        [.. | objects |
-         select(.type == "workspace" and .name == $workspace) |
-         .nodes[]? | .. | objects |
-         select(.app_id != null or .window != null)] | length')
+    layout=$(swaymsg -t get_tree -r | jq -r --arg name "$name" --argjson portrait "$portrait" '
+        .. | objects | select(.type == "workspace" and .name == $name) |
+        ([.nodes[]? | .. | objects | select(.app_id != null or .window != null)] | length) as $count |
+        (first(paths(.focused == true) | select(.[0] == "nodes")) // null) as $path |
+        ([.floating_nodes[]? | .. | objects | select(.focused == true)] | length > 0) as $floating_focus |
+        if $path == null and ($count > 0 or $floating_focus) then empty else
+            ($count > 1 and ($count % 2) == 0) as $even |
+            (if $portrait != $even then "vertical" else "horizontal" end) as $direction |
+            (if $path == null then . else getpath($path[0:-2]) end) as $parent |
+            select($parent.layout != (if $direction == "vertical" then "splitv" else "splith" end)) |
+            [$direction, (if $path == null then "" else getpath($path).id end)] | @tsv
+        end')
+    [ -n "$layout" ] || return
 
-    if [ "$height" -gt "$width" ]; then
-        base=vertical
-        other=horizontal
-    else
-        base=horizontal
-        other=vertical
-    fi
-
-    if [ "$windows" -le 1 ] || [ "$((windows % 2))" -eq 1 ]; then
-        direction=$base
-    else
-        direction=$other
-    fi
-
+    IFS="$(printf '\t')" read -r direction id <<EOF
+$layout
+EOF
     if [ -n "$id" ]; then
         swaymsg -q -- "[con_id=$id] split $direction"
     else
@@ -46,19 +37,11 @@ exec 9>"${XDG_RUNTIME_DIR:-/tmp}/spaceos-layout.lock"
 flock -n 9 || exit 0
 
 apply_layout
-swaymsg -m -t subscribe '["window", "workspace"]' |
-  jq -r --unbuffered '
-      if .container? then
-          select(.change == "new" or .change == "close" or .change == "move") |
-          [.change, .container.id] | @tsv
-      else
-          select(.change == "focus") | "focus"
-      end' |
-while IFS="$(printf '\t')" read -r change id; do
-    sleep 0.05
-    if [ "$change" = new ] || [ "$change" = move ]; then
-        apply_layout "$id"
-    else
+swaymsg -m -t subscribe '["window", "workspace", "output"]' |
+    jq -r --unbuffered '
+        select(.change == "new" or .change == "close" or .change == "move" or
+               .change == "focus" or .change == "floating" or
+               .change == "unspecified") | .change' |
+    while IFS= read -r _; do
         apply_layout
-    fi
-done
+    done
