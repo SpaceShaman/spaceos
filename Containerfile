@@ -141,6 +141,8 @@ RUN set -eux \
         imv \
         gnome-disk-utility \
         foliate \
+        libreoffice-calc \
+        libreoffice-writer \
     && rm -f /tmp/bruno.rpm \
     && dnf5 clean all
 
