@@ -1,4 +1,19 @@
 #!/bin/sh
 
 export _JAVA_AWT_WM_NONREPARENTING=1
-exec /usr/lib/zaproxy/zap.sh "$@"
+
+case "$(gsettings get org.gnome.desktop.interface color-scheme)" in
+    *prefer-dark*)
+        look_and_feel=Flat\ Dark
+        look_and_feel_class=com.formdev.flatlaf.FlatDarkLaf
+        ;;
+    *)
+        look_and_feel=Flat\ Light
+        look_and_feel_class=com.formdev.flatlaf.FlatLightLaf
+        ;;
+esac
+
+exec /usr/lib/zaproxy/zap.sh \
+    -config "view.lookAndFeel=$look_and_feel" \
+    -config "view.lookAndFeelClass=$look_and_feel_class" \
+    "$@"
