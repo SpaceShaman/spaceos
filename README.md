@@ -234,6 +234,8 @@ dependencies inherited from the Fedora base image.
 | [FileZilla](https://filezilla-project.org/) | FTP, FTPS, and SFTP client. |
 | [GNOME Disks](https://apps.gnome.org/DiskUtility/) | Utility for inspecting and managing storage devices and disk images. |
 | [Foliate](https://github.com/johnfactotum/foliate) | eBook reader supporting EPUB, MOBI, AZW3, and PDF formats. |
+| [LibreOffice Calc](https://www.libreoffice.org/discover/calc/) | Spreadsheet application. |
+| [LibreOffice Writer](https://www.libreoffice.org/discover/writer/) | Word processor. |
 
 ### Terminal and development
 
