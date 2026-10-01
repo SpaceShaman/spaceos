@@ -110,6 +110,7 @@ RUN set -eux \
         git \
         tmux \
         golang \
+        zig \
         uv \
         rclone \
         rsync \

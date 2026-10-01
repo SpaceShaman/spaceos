@@ -251,6 +251,7 @@ dependencies inherited from the Fedora base image.
 | [wlctl](https://github.com/aashish-thapa/wlctl) | Terminal interface for Wi-Fi and VPN connections managed by NetworkManager. |
 | [bluetui](https://github.com/pythops/bluetui) | Terminal interface for managing Bluetooth devices through BlueZ. |
 | [Go](https://github.com/golang/go) | Go compiler and development toolchain. |
+| [Zig](https://ziglang.org) | Zig compiler and development toolchain. |
 | [uv](https://github.com/astral-sh/uv) | Fast Python project and package manager. |
 | [rclone](https://github.com/rclone/rclone) | Command-line sync tool for cloud storage and remote filesystems. |
 | [rsync](https://github.com/RsyncProject/rsync) | Efficient local and remote file synchronization utility. |
