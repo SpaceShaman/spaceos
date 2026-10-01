@@ -44,6 +44,7 @@ RUN set -eux \
 # ============================================================
 
 ARG CHATGPT_RPM_URL=https://persistent.oaistatic.com/codex-app-prod/linux/rpm/latest/chatgpt.x86_64.rpm
+ARG SOPS_RPM_URL=https://github.com/getsops/sops/releases/download/v3.13.3/sops-3.13.3-1.x86_64.rpm
 
 ADD https://github.com/usebruno/bruno/releases/download/v4.1.0/bruno_4.1.0_x86_64_linux.rpm /tmp/bruno.rpm
 
@@ -119,6 +120,7 @@ RUN set -eux \
         bat \
         htop \
         newsboat \
+        "${SOPS_RPM_URL}" \
     && : "Container tools" \
     && dnf5 install -y \
         podman \
