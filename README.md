@@ -257,6 +257,7 @@ dependencies inherited from the Fedora base image.
 | [zk](https://github.com/zk-org/zk) | Plain-text note-taking assistant with a Zettelkasten workflow. |
 | [jq](https://github.com/jqlang/jq) | Command-line JSON processor. |
 | [SOPS](https://github.com/getsops/sops) | Command-line editor for encrypted secrets in configuration files. |
+| [age](https://github.com/FiloSottile/age) | Simple, modern and secure encryption tool. |
 | [fzf](https://github.com/junegunn/fzf) | Fuzzy finder for filtering and selecting items in the terminal. |
 | [fd](https://github.com/sharkdp/fd) | Fast command-line tool for finding files and directories. |
 | [bat](https://github.com/sharkdp/bat) | `cat` clone with syntax highlighting and Git integration. |
