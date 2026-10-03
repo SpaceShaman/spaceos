@@ -222,6 +222,7 @@ dependencies inherited from the Fedora base image.
 | Software | Description |
 |---|---|
 | [Firefox](https://www.firefox.com/) | Web browser. |
+| [chromium](https://www.chromium.org) | Web browser. |
 | [Thunderbird](https://github.com/thunderbird/thunderbird-desktop) | Email and calendar client. |
 | [Signal Desktop](https://github.com/signalapp/Signal-Desktop) | Signal messenger distributed as an AppImage. |
 | [Teams for Linux](https://github.com/IsmaelMartinez/teams-for-linux) | Unofficial Microsoft Teams client. |
@@ -252,6 +253,7 @@ dependencies inherited from the Fedora base image.
 | [bluetui](https://github.com/pythops/bluetui) | Terminal interface for managing Bluetooth devices through BlueZ. |
 | [Go](https://github.com/golang/go) | Go compiler and development toolchain. |
 | [Zig](https://ziglang.org) | Zig compiler and development toolchain. |
+| [raylib-devel](https://github.com/raysan5/raylib) | Dependency for building and running raylib-based applications. |
 | [uv](https://github.com/astral-sh/uv) | Fast Python project and package manager. |
 | [rclone](https://github.com/rclone/rclone) | Command-line sync tool for cloud storage and remote filesystems. |
 | [rsync](https://github.com/RsyncProject/rsync) | Efficient local and remote file synchronization utility. |

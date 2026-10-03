@@ -111,6 +111,7 @@ RUN set -eux \
         tmux \
         golang \
         zig \
+        raylib-devel \
         uv \
         rclone \
         rsync \
@@ -135,6 +136,7 @@ RUN set -eux \
     && dnf5 install -y \
         java-25-openjdk \
         firefox \
+        chromium \
         "${CHATGPT_RPM_URL}" \
         /tmp/bruno.rpm \
         teams-for-linux \
