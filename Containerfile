@@ -65,6 +65,9 @@ RUN set -eux \
     && dnf5 config-manager addrepo \
         --from-repofile https://repo.teamsforlinux.de/rpm/teams-for-linux.repo
 
+RUN sudo dnf install -y \
+    https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
+
 
 # ============================================================
 # Fedora and RPM packages
@@ -143,6 +146,8 @@ RUN set -eux \
         thunderbird \
         qbittorrent \
         vlc \
+        vlc-plugins-freeworld \
+        libavcodec-freeworld \
         gimp \
         filezilla \
         imv \
