@@ -89,6 +89,7 @@ RUN set -eux \
         tuigreet \
         sway \
         swayidle \
+        mako \
         waybar \
         plymouth \
         plymouth-plugin-two-step \

@@ -17,6 +17,7 @@ esac
 
 ln -sfn "$theme.toml" /etc/alacritty/themes/current.toml
 ln -sfn "$theme.conf" /etc/sway/config.d/theme/current.conf
+ln -sfn "themes/$theme.conf" /etc/mako/config
 ln -sfn "theme-$theme.css" /etc/xdg/waybar/theme-current.css
 ln -sfn "$theme.rasi" /etc/rofi/themes/current.rasi
 ln -sfn "/usr/share/themes/$gtk_theme/gtk-4.0/colors.css" /etc/xdg/gtk-4.0/current.css
@@ -26,6 +27,10 @@ gsettings set org.gnome.desktop.interface color-scheme "$color_scheme"
 gsettings set org.gnome.desktop.interface gtk-theme "$gtk_theme"
 
 GTK_THEME=$gtk_theme dbus-update-activation-environment --systemd GTK_THEME
+
+if command -v makoctl >/dev/null 2>&1; then
+    makoctl reload || :
+fi
 
 if [ -S "${SWAYSOCK:-}" ]; then
     swaymsg reload >/dev/null
