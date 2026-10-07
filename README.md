@@ -210,11 +210,12 @@ dependencies inherited from the Fedora base image.
 |---|---|
 | [Sway](https://github.com/swaywm/sway) | Tiling Wayland compositor compatible with the i3 configuration model. |
 | [swayidle](https://github.com/swaywm/swayidle) | Turns displays off after 5 minutes of inactivity and restores them on input. |
+| [mako](https://github.com/emersion/mako) | Wayland notification daemon with matching Ayu Dark and Ayu Light themes. |
 | [Waybar](https://github.com/Alexays/Waybar) | Status bar showing workspaces, network, audio, battery, recording, and update state. |
 | [Rofi](https://github.com/davatorium/rofi) | Application launcher. |
 | [Alacritty](https://github.com/alacritty/alacritty) | GPU-accelerated terminal emulator. |
 | [greetd](https://git.sr.ht/~kennylevinsen/greetd) + [tuigreet](https://github.com/apognu/tuigreet) | Lightweight login manager used to start the Sway session. |
-| [Ayu Dark / Ayu Light](https://github.com/ayu-theme/ayu-colors) | Matching GTK, terminal, Waybar, and Rofi themes. |
+| [Ayu Dark / Ayu Light](https://github.com/ayu-theme/ayu-colors) | Matching GTK, terminal, Waybar, Rofi, and mako themes. |
 | [Plymouth](https://www.freedesktop.org/wiki/Software/Plymouth/) | Graphical boot screen, including the LUKS unlock prompt. |
 
 ### Applications
