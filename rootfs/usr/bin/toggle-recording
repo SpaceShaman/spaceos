@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+OUTPUT_DIR="$HOME/Videos"
+FULLSCREEN=false
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -f|--full)
+            FULLSCREEN=true
+            shift
+            ;;
+        *)
+            echo "Unknown option: $1" >&2
+            echo "Usage: $0 [-f|--full]" >&2
+            exit 1
+            ;;
+    esac
+done
+
+# If wf-recorder is already running, stop recording.
+if pgrep -x wf-recorder >/dev/null; then
+    pkill -SIGINT wf-recorder
+    exit 0
+fi
+
+mkdir -p "$OUTPUT_DIR"
+
+OUTPUT_FILE="$OUTPUT_DIR/recording-$(date +%Y-%m-%d_%H-%M-%S).mp4"
+
+if "$FULLSCREEN"; then
+    OUTPUT="$(swaymsg -t get_outputs -r | jq -er '.[] | select(.active and .focused) | .name')" || {
+        echo "Failed to determine the focused output." >&2
+        exit 1
+    }
+
+    wf-recorder \
+        --no-damage \
+        -o "$OUTPUT" \
+        -f "$OUTPUT_FILE" &
+else
+    GEOMETRY="$(slurp)" || exit 0
+
+    wf-recorder \
+        --no-damage \
+        -g "$GEOMETRY" \
+        -f "$OUTPUT_FILE" &
+fi

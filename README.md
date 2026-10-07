@@ -210,7 +210,7 @@ dependencies inherited from the Fedora base image.
 |---|---|
 | [Sway](https://github.com/swaywm/sway) | Tiling Wayland compositor compatible with the i3 configuration model. |
 | [swayidle](https://github.com/swaywm/swayidle) | Turns displays off after 5 minutes of inactivity and restores them on input. |
-| [Waybar](https://github.com/Alexays/Waybar) | Status bar showing workspaces, network, audio, battery, and update state. |
+| [Waybar](https://github.com/Alexays/Waybar) | Status bar showing workspaces, network, audio, battery, recording, and update state. |
 | [Rofi](https://github.com/davatorium/rofi) | Application launcher. |
 | [Alacritty](https://github.com/alacritty/alacritty) | GPU-accelerated terminal emulator. |
 | [greetd](https://git.sr.ht/~kennylevinsen/greetd) + [tuigreet](https://github.com/apognu/tuigreet) | Lightweight login manager used to start the Sway session. |
@@ -283,6 +283,7 @@ dependencies inherited from the Fedora base image.
 | [Wiremix](https://github.com/tsowell/wiremix) | Terminal mixer for PipeWire. |
 | [brightnessctl](https://github.com/Hummer12007/brightnessctl) | Display brightness control. |
 | [grim](https://github.com/emersion/grim) + [slurp](https://github.com/emersion/slurp) + [swappy](https://github.com/jtheoof/swappy) | Wayland screenshot capture, region selection, and annotation. |
+| [wf-recorder](https://github.com/ammen99/wf-recorder) | Wayland screen recorder for capturing a selected region or a full screen. |
 | [DisplayLink](https://www.synaptics.com/products/displaylink-graphics) / [EVDI](https://github.com/DisplayLink/evdi) | Support for DisplayLink adapters and docking stations. |
 | [Netcat](https://nmap.org/ncat/) (`nc`) | Command-line utility for TCP and UDP connections. |
 
@@ -321,6 +322,7 @@ I love aliases. Life is too short to type the same long command over and over, a
 | `Mod + G` | Open ChatGPT. |
 | `Mod + T` | Toggle the light/dark theme. |
 | `Mod + Escape` | Show or hide Waybar. |
+| `Mod + Shift + Escape` | Toggle the left monitor between landscape and portrait orientation. |
 | `Mod + Q` | Close the focused window. |
 | `Mod + Shift + Q` | Power off the system. |
 | `Mod + Shift + R` | Reload the Sway configuration. |
@@ -340,15 +342,20 @@ I love aliases. Life is too short to type the same long command over and over, a
 | `Mod + Shift + J` / `Mod + Shift + ;` | Move the focused window to the output on the left/right. |
 | `Mod + Shift + L` / `Mod + Shift + K` | Move the focused window to the output above/below. |
 
-### Screenshots and media
+### Screenshots, recording, and media
 
 | Shortcut | Action |
 |---|---|
 | `Print Screen` | Select a region, capture it, and open it in Swappy. |
 | `Shift + Print Screen` | Capture the full screen and open it in Swappy. |
+| `Ctrl + Print Screen` | Start recording a selected region, or stop an active recording. |
+| `Ctrl + Shift + Print Screen` | Start recording the focused monitor's full screen, or stop an active recording. |
 | `XF86AudioRaiseVolume` / `XF86AudioLowerVolume` | Increase/decrease audio volume. |
 | `XF86AudioMute` | Toggle audio mute. |
 | `XF86MonBrightnessUp` / `XF86MonBrightnessDown` | Increase/decrease display brightness. |
+
+Screenshots are saved as PNG files in `~/Pictures`.
+Recordings are saved as MP4 files in `~/Videos`. A red filled circle in Waybar indicates that recording is active.
 
 ## Dynamic window and workspace management
 

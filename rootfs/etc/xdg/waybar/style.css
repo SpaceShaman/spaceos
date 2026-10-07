@@ -46,12 +46,16 @@ window#waybar {
     padding: 0 8px;
 }
 
-#custom-spaceos-update, #tray, #network, #pulseaudio, #backlight, #battery, #clock {
+#custom-spaceos-recording, #custom-spaceos-update, #tray, #network, #pulseaudio, #backlight, #battery, #clock {
     padding: 0 2px;
 }
 
 #custom-spaceos-update {
     color: @theme_accent;
+}
+
+#custom-spaceos-recording {
+    color: #ff0000;
 }
 
 #clock {

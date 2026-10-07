@@ -103,6 +103,7 @@ RUN set -eux \
         grim \
         slurp \
         swappy \
+        wf-recorder \
         bluez \
     && : "Development and command-line tools" \
     && dnf5 install -y \

@@ -6,6 +6,7 @@
   "reload_style_on_change": true,
   "modules-left": ["sway/workspaces", "sway/window"],
   "modules-right": [
+    "custom/spaceos-recording",
     "custom/spaceos-update",
     "tray",
     "network",
@@ -64,6 +65,10 @@
     "format": "{icon} {capacity}%",
     "format-charging": "󰂄 {capacity}%",
     "format-icons": ["󰂎", "󰁺", "󰁼", "󰁾", "󰂀", "󰁹"]
+  },
+  "custom/spaceos-recording": {
+    "exec": "/usr/libexec/spaceos-recording-waybar",
+    "interval": 1
   },
   "custom/spaceos-update": {
     "exec": "/usr/libexec/spaceos-update-waybar",

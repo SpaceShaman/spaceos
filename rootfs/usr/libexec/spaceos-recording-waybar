@@ -1,0 +1,6 @@
+#!/usr/bin/bash
+set -euo pipefail
+
+if pgrep -x wf-recorder >/dev/null; then
+    printf '●\nScreen recording is active\n'
+fi
