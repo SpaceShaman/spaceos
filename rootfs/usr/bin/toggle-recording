@@ -37,6 +37,12 @@ if "$FULLSCREEN"; then
 
     wf-recorder \
         --no-damage \
+        -c libx264 \
+        -p preset=veryfast \
+        -p crf=23 \
+        -p profile=baseline \
+        -p level=4.0 \
+        -x yuv420p \
         -o "$OUTPUT" \
         -f "$OUTPUT_FILE" &
 else
@@ -44,6 +50,12 @@ else
 
     wf-recorder \
         --no-damage \
+        -c libx264 \
+        -p preset=veryfast \
+        -p crf=23 \
+        -p profile=baseline \
+        -p level=4.0 \
+        -x yuv420p \
         -g "$GEOMETRY" \
         -f "$OUTPUT_FILE" &
 fi
