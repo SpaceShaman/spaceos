@@ -8,7 +8,7 @@ bind-key m toggle-article-read
 bind-key r toggle-show-read-feeds
 
 # --- Browser ---
-browser "firefox %u &"
+browser "setsid firefox %u >/dev/null 2>&1 < /dev/null &"
 
 # --- Refresh ---
 auto-reload yes
