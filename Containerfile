@@ -157,6 +157,8 @@ RUN set -eux \
         foliate \
         libreoffice-calc \
         libreoffice-writer \
+        nicotine+ \
+        moc \
     && rm -f /tmp/bruno.rpm \
     && dnf5 clean all
 
