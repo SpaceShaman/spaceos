@@ -30,7 +30,15 @@ if status is-interactive
   alias devr='docker compose -f docker-compose.dev.yml restart'
   alias t='trans -b :en'
   alias tp='trans -b :pl'
-  alias box='rclone mount box: ~/box --vfs-cache-mode full --daemon'
+  alias box='rclone mount box: ~/box \
+    --vfs-cache-mode full \
+    --vfs-cache-max-age 168h \
+    --vfs-cache-max-size 10G \
+    --buffer-size 8M \
+    --vfs-read-ahead 32M \
+    --dir-cache-time 1h \
+    --daemon'
+  alias boxu='fusermount3 -uz ~/box'
   alias syncbox='rsync -av --size-only --delete --progress -e ssh box:Muzyka/ Muzyka/'
   alias newsboat='newsboat \
     --config-file /etc/newsboat/config \
