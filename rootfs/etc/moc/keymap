@@ -1,0 +1,8 @@
+menu_down             = k
+menu_up               = l
+menu_page_down       += K
+menu_page_up         += L
+toggle_menu          += j ;
+plist_move_up         = UP
+plist_move_down       = DOWN
+go_up                 = u
