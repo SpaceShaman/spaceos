@@ -311,6 +311,7 @@ I love aliases. Life is too short to type the same long command over and over, a
 | `syncbox` | `rsync -av --size-only --delete --progress -e ssh box:Muzyka/ Muzyka/` | Sync music from `box` into the local `Muzyka/` directory. |
 | `newsboat`, `n` | `newsboat --config-file /etc/newsboat/config --url-file /etc/newsboat/urls` | Open Newsboat with the system feed list and configuration. |
 | `g` | `codex exec --ephemeral --skip-git-repo-check --sandbox read-only` | Run a prompt with Codex in a read-only sandbox; pass the prompt as arguments or through standard input. Defined as a Fish function. |
+| `moc` | `mocp` | Open the MOC terminal music player. |
 
 ## Keyboard shortcuts
 
