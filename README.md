@@ -230,7 +230,9 @@ dependencies inherited from the Fedora base image.
 | [ChatGPT](https://chatgpt.com/download) | ChatGPT desktop application for Linux. |
 | [Bruno](https://github.com/usebruno/bruno) | API client for designing and testing HTTP requests. |
 | [qBittorrent](https://github.com/qbittorrent/qBittorrent) | BitTorrent client. |
+| [Nicotine+](https://nicotine-plus.org/) | Graphical Soulseek file-sharing client. |
 | [VLC](https://github.com/videolan/vlc) | Multimedia player. |
+| [MOC](https://moc.daper.net/) | Terminal music player. |
 | [GIMP](https://github.com/GNOME/gimp) | Raster graphics editor. |
 | [imv](https://sr.ht/~exec64/imv/) | Wayland image viewer. |
 | [FileZilla](https://filezilla-project.org/) | FTP, FTPS, and SFTP client. |
@@ -304,7 +306,8 @@ I love aliases. Life is too short to type the same long command over and over, a
 | `d`, `du`, `dd`, `dr` | `docker compose`, `docker compose up -d`, `docker compose down`, `docker compose restart` | Manage Compose projects. |
 | `dev`, `devd`, `devr` | `docker compose -f docker-compose.dev.yml` with `up -d`, `down`, or `restart` | Manage the development Compose file. |
 | `t`, `tp` | `trans -b :en`, `trans -b :pl` | Translate text to English or Polish. |
-| `box` | `rclone mount box: ~/box --vfs-cache-mode full --daemon` | Mount my Box remote at `~/box`. |
+| `box` | `rclone mount box: ~/box --vfs-cache-mode full --vfs-cache-max-age 168h --vfs-cache-max-size 10G --buffer-size 8M --vfs-read-ahead 32M --dir-cache-time 1h --daemon` | Mount my Box remote at `~/box`. |
+| `boxu` | `fusermount3 -uz ~/box` | Unmount my Box remote from `~/box`. |
 | `syncbox` | `rsync -av --size-only --delete --progress -e ssh box:Muzyka/ Muzyka/` | Sync music from `box` into the local `Muzyka/` directory. |
 | `newsboat`, `n` | `newsboat --config-file /etc/newsboat/config --url-file /etc/newsboat/urls` | Open Newsboat with the system feed list and configuration. |
 | `g` | `codex exec --ephemeral --skip-git-repo-check --sandbox read-only` | Run a prompt with Codex in a read-only sandbox; pass the prompt as arguments or through standard input. Defined as a Fish function. |
