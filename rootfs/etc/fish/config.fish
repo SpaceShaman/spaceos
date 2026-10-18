@@ -44,6 +44,9 @@ if status is-interactive
     --config-file /etc/newsboat/config \
     --url-file /etc/newsboat/urls'
   alias n=newsboat
+  alias mocp='mocp -C /etc/moc/config'
+  alias moc=mocp
+
 
   function g
     set -l common_args --ephemeral --skip-git-repo-check --sandbox read-only
