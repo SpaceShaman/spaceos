@@ -159,6 +159,7 @@ RUN set -eux \
         libreoffice-writer \
         nicotine+ \
         moc \
+        asunder \
     && rm -f /tmp/bruno.rpm \
     && dnf5 clean all
 

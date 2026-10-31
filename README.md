@@ -233,6 +233,7 @@ dependencies inherited from the Fedora base image.
 | [Nicotine+](https://nicotine-plus.org/) | Graphical Soulseek file-sharing client. |
 | [VLC](https://github.com/videolan/vlc) | Multimedia player. |
 | [MOC](https://moc.daper.net/) | Terminal music player. |
+| [Asunder](http://www.littlesvr.ca/asunder/index.php) | CD ripper and audio file encoder. |
 | [GIMP](https://github.com/GNOME/gimp) | Raster graphics editor. |
 | [imv](https://sr.ht/~exec64/imv/) | Wayland image viewer. |
 | [FileZilla](https://filezilla-project.org/) | FTP, FTPS, and SFTP client. |
