@@ -237,6 +237,7 @@ dependencies inherited from the Fedora base image.
 | [GIMP](https://github.com/GNOME/gimp) | Raster graphics editor. |
 | [imv](https://sr.ht/~exec64/imv/) | Wayland image viewer. |
 | [FileZilla](https://filezilla-project.org/) | FTP, FTPS, and SFTP client. |
+| [FreeRDP](https://www.freerdp.com/) | Remote Desktop Protocol client with Wayland support. |
 | [GNOME Disks](https://apps.gnome.org/DiskUtility/) | Utility for inspecting and managing storage devices and disk images. |
 | [Foliate](https://github.com/johnfactotum/foliate) | eBook reader supporting EPUB, MOBI, AZW3, and PDF formats. |
 | [LibreOffice Calc](https://www.libreoffice.org/discover/calc/) | Spreadsheet application. |
@@ -290,6 +291,7 @@ dependencies inherited from the Fedora base image.
 | [wf-recorder](https://github.com/ammen99/wf-recorder) | Wayland screen recorder for capturing a selected region or a full screen. |
 | [DisplayLink](https://www.synaptics.com/products/displaylink-graphics) / [EVDI](https://github.com/DisplayLink/evdi) | Support for DisplayLink adapters and docking stations. |
 | [Netcat](https://nmap.org/ncat/) (`nc`) | Command-line utility for TCP and UDP connections. |
+| [NetBird](https://github.com/netbirdio/netbird) | WireGuard-based private networking client with its systemd service masked by default. |
 
 ## Fish aliases
 

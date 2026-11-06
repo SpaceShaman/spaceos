@@ -65,6 +65,17 @@ RUN set -eux \
     && dnf5 config-manager addrepo \
         --from-repofile https://repo.teamsforlinux.de/rpm/teams-for-linux.repo
 
+# Official NetBird CLI repository
+RUN printf '%s\n' \
+    '[netbird]' \
+    'name=netbird' \
+    'baseurl=https://pkgs.netbird.io/yum/' \
+    'enabled=1' \
+    'gpgcheck=1' \
+    'repo_gpgcheck=1' \
+    'gpgkey=https://pkgs.netbird.io/yum/repodata/repomd.xml.key' \
+    >/etc/yum.repos.d/netbird.repo
+
 RUN sudo dnf install -y \
     https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
 
@@ -152,6 +163,7 @@ RUN set -eux \
         libavcodec-freeworld \
         gimp \
         filezilla \
+        freerdp \
         imv \
         gnome-disk-utility \
         foliate \
@@ -161,6 +173,9 @@ RUN set -eux \
         moc \
         asunder \
     && rm -f /tmp/bruno.rpm \
+    && : "NetBird: skip RPM scripts that require a running service manager" \
+    && dnf5 install -y --setopt=tsflags=noscripts netbird \
+    && ln -sfn /dev/null /usr/lib/systemd/system/netbird.service \
     && dnf5 clean all
 
 
