@@ -242,7 +242,6 @@ dependencies inherited from the Fedora base image.
 | [Foliate](https://github.com/johnfactotum/foliate) | eBook reader supporting EPUB, MOBI, AZW3, and PDF formats. |
 | [LibreOffice Calc](https://www.libreoffice.org/discover/calc/) | Spreadsheet application. |
 | [LibreOffice Writer](https://www.libreoffice.org/discover/writer/) | Word processor. |
-| [ZAP](github.com/zaproxy/zaproxy) | Security testing tool for web applications. |
 
 ### Terminal and development
 
