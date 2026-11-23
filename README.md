@@ -275,6 +275,7 @@ dependencies inherited from the Fedora base image.
 | [opencommit](https://github.com/di-sukharev/opencommit) | Generates commit messages from staged changes. |
 | [Translate Shell](https://github.com/soimort/translate-shell) | Command-line translator using various translation engines. |
 | [Newsboat](https://github.com/newsboat/newsboat) | Terminal-based RSS/Atom feed reader. |
+| [Taskwarrior](https://taskwarrior.org/) | Command-line TODO list manager with a flexible task tracking system. |
 
 ### Containers and system tools
 

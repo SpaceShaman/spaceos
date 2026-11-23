@@ -140,6 +140,7 @@ RUN set -eux \
         newsboat \
         "${SOPS_RPM_URL}" \
         age \
+        task \
     && : "Container tools" \
     && dnf5 install -y \
         podman \
