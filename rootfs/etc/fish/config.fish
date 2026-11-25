@@ -22,6 +22,7 @@ if status is-interactive
   alias v=nvim
   alias vim=nvim
   alias p=python3
+  alias g=codex
   alias d='docker compose'
   alias du='docker compose up -d'
   alias dd='docker compose down'
@@ -47,16 +48,4 @@ if status is-interactive
   alias n=newsboat
   alias mocp='mocp -C /etc/moc/config'
   alias moc=mocp
-
-
-  function g
-    set -l common_args --ephemeral --skip-git-repo-check --sandbox read-only
-
-    if test (count $argv) -gt 0
-      set -l prompt (string join ' ' -- $argv)
-      codex exec $common_args "$prompt" 2>/dev/null
-    else
-      codex exec $common_args - 2>/dev/null
-    end
-  end
 end
